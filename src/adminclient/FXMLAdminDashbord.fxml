@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="873.0" prefWidth="1248.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminclient.FXMLAdminDashbordController">
+   <bottom>
+      <AnchorPane prefHeight="47.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" layoutX="-1.0" layoutY="3.0" prefHeight="41.0" prefWidth="1248.0" text="\@COPYRIGHT 2019 - STUDIO 20" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </bottom>
+   <right>
+      <VBox prefHeight="662.0" prefWidth="208.0" style="-fx-background-color: WHITE; -fx-border-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="667.0" prefWidth="206.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="28.0" prefWidth="206.0" style="-fx-background-color: LIGHTGREEN; -fx-border-color: BLACK;" text="MODEL NR1" textAlignment="CENTER" />
+                  <AnchorPane prefHeight="41.0" prefWidth="206.0">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="102.0" layoutX="44.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/avatar.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <opaqueInsets>
+                        <Insets top="20.0" />
+                     </opaqueInsets>
+                  </AnchorPane>
+                  <Label alignment="CENTER" prefHeight="35.0" prefWidth="206.0" text="NickName" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView prefHeight="137.0" prefWidth="206.0">
+                    <columns>
+                      <TableColumn minWidth="-Infinity" prefWidth="100.0" text="Earnings">
+                           <columns>
+                              <TableColumn minWidth="-Infinity" prefWidth="126.0" text="Total this Session" />
+                              <TableColumn minWidth="-Infinity" prefWidth="74.0" text="2300$" />
+                           </columns>
+                        </TableColumn>
+                    </columns>
+                  </TableView>
+                  <TableView prefHeight="137.0" prefWidth="206.0">
+                     <columns>
+                        <TableColumn minWidth="-Infinity" prefWidth="100.0" text="Time online">
+                           <columns>
+                              <TableColumn minWidth="-Infinity" prefWidth="126.0" text="Total this Session" />
+                              <TableColumn minWidth="-Infinity" prefWidth="74.0" text="88:30:00" />
+                           </columns>
+                        </TableColumn>
+                     </columns>
+                  </TableView>
+                  <HBox prefHeight="33.0" prefWidth="206.0">
+                     <children>
+                        <Button graphicTextGap="1.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="115.0" text="CHECK ONLINE">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="116.0" text="VIEW PROFILE">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <Label prefHeight="36.0" prefWidth="206.0" text="NOTES AND FEEDBACK">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextArea prefHeight="151.0" prefWidth="206.0" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </right>
+   <top>
+      <VBox prefHeight="131.0" prefWidth="927.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <VBox layoutX="8.0" layoutY="24.0" prefHeight="82.0" prefWidth="174.0" style="-fx-border-color: red;">
+                     <children>
+                        <ImageView fitHeight="111.0" fitWidth="222.0" pickOnBounds="true" preserveRatio="true">
+                           <VBox.margin>
+                              <Insets left="25.0" right="25.0" />
+                           </VBox.margin>
+                           <image>
+                              <Image url="@images/avatar.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </VBox>
+                  <Label layoutX="199.0" layoutY="65.0" prefHeight="55.0" prefWidth="105.0" text="Trainer">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1219.0" layoutY="12.0" text="X" textFill="RED">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="523.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/logo2.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </top>
+   <left>
+      <VBox prefHeight="483.0" prefWidth="183.0" style="-fx-background-color: lightgrey; -fx-border-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="20.0" prefWidth="112.0" text="ALL MODELS" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <ScrollPane prefHeight="271.0" prefWidth="181.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="293.0" prefWidth="166.0">
+                     <children>
+                        <Label layoutX="7.0" layoutY="14.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="37.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="60.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="83.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="106.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="129.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="151.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="173.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="195.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="217.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="239.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="261.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: #9c1b21;" text="MODEL NR1" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <Label alignment="CENTER" prefHeight="20.0" prefWidth="126.0" text="YOUR MODELS">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <ScrollPane prefHeight="348.0" prefWidth="181.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="166.0">
+                     <children>
+                        <Label layoutX="7.0" layoutY="14.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: GREEN;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="37.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: GREEN;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="59.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: GREEN;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="81.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: GREEN;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="103.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: GREEN;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="125.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: GREEN;" text="MODEL NR1" />
+                        <Label layoutX="7.0" layoutY="147.0" prefHeight="20.0" prefWidth="128.0" style="-fx-border-color: GREEN;" text="MODEL NR1" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <AnchorPane prefHeight="662.0" prefWidth="770.0" BorderPane.alignment="CENTER">
+         <children>
+            <TabPane layoutX="-1.0" prefHeight="479.0" prefWidth="858.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="DASHBOARD">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="296.0" prefWidth="826.0">
+                           <children>
+                              <ScrollPane layoutX="14.0" layoutY="34.0" prefHeight="188.0" prefWidth="842.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="241.0" prefWidth="842.0">
+                                       <children>
+                                          <HBox prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;" text="Prepare for start of shift! Please read the report and alocate your models!">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: green;" text="DONE" textFill="WHITE" />
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="46.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;" text="Trainers 2'nd task for the shift!">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="92.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;" text="Trainers 3'nd task for the shift!">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="139.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="185.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </ScrollPane>
+                              <ScrollPane layoutX="15.0" layoutY="250.0" prefHeight="153.0" prefWidth="841.0">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="245.0" prefWidth="826.0">
+                                       <children>
+                                          <HBox prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="46.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="92.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="138.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutY="184.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                             <children>
+                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </ScrollPane>
+                              <Label layoutX="10.0" layoutY="10.0" text="Tasks:">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="14.0" layoutY="230.0" text="Notifications:">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="VPN CHECK">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab text="SHIFT REPORT">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <TabPane layoutX="14.0" layoutY="470.0" prefHeight="151.0" prefWidth="665.0" style="-fx-border-color: black;" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="GENERAL CHAT">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="70.0" prefWidth="665.0" />
+                  </content>
+                </Tab>
+                <Tab text="MODEL NR1">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab text="MODEL NR2">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab text="MODEL NR3">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab text="MODEL NR4">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab text="MODEL NR5">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <VBox layoutX="679.0" layoutY="470.0" prefHeight="151.0" prefWidth="156.0" style="-fx-border-color: black;">
+               <children>
+                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR1">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR2">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR3">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR4">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <HBox layoutX="14.0" layoutY="621.0" prefHeight="37.0" prefWidth="821.0" style="-fx-border-color: black;">
+               <children>
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" text="CHAT">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
