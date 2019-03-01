@@ -119,7 +119,7 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="1219.0" layoutY="12.0" text="X" textFill="RED">
+                  <Label layoutX="1219.0" layoutY="12.0" onMouseClicked="#handleClose" text="X" textFill="RED">
                      <font>
                         <Font size="24.0" />
                      </font>

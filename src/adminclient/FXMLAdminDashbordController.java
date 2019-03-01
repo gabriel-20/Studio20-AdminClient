@@ -6,6 +6,8 @@
 package adminclient;
 
 import static adminclient.helper.Global.SOCKETIO;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -16,6 +18,8 @@ import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -32,6 +36,12 @@ import org.json.JSONArray;
 public class FXMLAdminDashbordController implements Initializable {
     
     private Socket socket;
+    
+    @FXML
+    private void handleClose(MouseEvent event){
+        System.exit(0);
+    }
+    
     
       @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -119,6 +129,11 @@ public class FXMLAdminDashbordController implements Initializable {
                 @Override
                 public void call(Object... args) {
                     System.out.println("chat: " + args[0]);
+                    
+                    Gson gson = new Gson();
+                    JsonElement data = gson.fromJson(args[0].toString(), JsonElement.class);
+                    System.out.println("message: " + data);
+                    
                 }
 
             }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
