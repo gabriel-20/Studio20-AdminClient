@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1343.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminclient.FXMLAdminDashbordController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1306.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminclient.FXMLAdminDashbordController">
    <bottom>
       <AnchorPane prefHeight="47.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
          <children>
@@ -29,74 +29,6 @@
          </children>
       </AnchorPane>
    </bottom>
-   <right>
-      <VBox prefHeight="662.0" prefWidth="208.0" style="-fx-background-color: WHITE; -fx-border-color: black;" BorderPane.alignment="CENTER">
-         <children>
-            <VBox prefHeight="667.0" prefWidth="206.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="28.0" prefWidth="206.0" style="-fx-background-color: LIGHTGREEN; -fx-border-color: BLACK;" text="MODEL NR1" textAlignment="CENTER" />
-                  <AnchorPane prefHeight="41.0" prefWidth="206.0">
-                     <children>
-                        <ImageView fitHeight="124.0" fitWidth="102.0" layoutX="44.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/avatar.jpg" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <opaqueInsets>
-                        <Insets top="20.0" />
-                     </opaqueInsets>
-                  </AnchorPane>
-                  <Label fx:id="selectedModelNickname" alignment="CENTER" prefHeight="35.0" prefWidth="206.0" text="NickName" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TableView prefHeight="137.0" prefWidth="206.0">
-                    <columns>
-                      <TableColumn minWidth="-Infinity" prefWidth="100.0" text="Earnings">
-                           <columns>
-                              <TableColumn minWidth="-Infinity" prefWidth="126.0" text="Total this Session" />
-                              <TableColumn minWidth="-Infinity" prefWidth="74.0" text="2300$" />
-                           </columns>
-                        </TableColumn>
-                    </columns>
-                  </TableView>
-                  <TableView prefHeight="137.0" prefWidth="206.0">
-                     <columns>
-                        <TableColumn minWidth="-Infinity" prefWidth="100.0" text="Time online">
-                           <columns>
-                              <TableColumn minWidth="-Infinity" prefWidth="126.0" text="Total this Session" />
-                              <TableColumn minWidth="-Infinity" prefWidth="74.0" text="88:30:00" />
-                           </columns>
-                        </TableColumn>
-                     </columns>
-                  </TableView>
-                  <HBox prefHeight="33.0" prefWidth="206.0">
-                     <children>
-                        <Button graphicTextGap="1.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="115.0" text="CHECK ONLINE">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Button>
-                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="116.0" text="VIEW PROFILE">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <Label prefHeight="36.0" prefWidth="206.0" text="NOTES AND FEEDBACK">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <TextArea prefHeight="151.0" prefWidth="206.0" />
-               </children>
-            </VBox>
-         </children>
-      </VBox>
-   </right>
    <top>
       <VBox prefHeight="131.0" prefWidth="927.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
          <children>
@@ -135,15 +67,15 @@
       </VBox>
    </top>
    <left>
-      <VBox prefHeight="662.0" prefWidth="188.0" style="-fx-background-color: lightgrey; -fx-border-color: black;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="662.0" prefWidth="188.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="20.0" prefWidth="112.0" text="ALL MODELS" textAlignment="CENTER">
+            <Label fx:id="labelAllModels" alignment="CENTER" prefHeight="20.0" prefWidth="186.0" text="ALL MODELS" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
             <AnchorPane fx:id="scrollModels" prefHeight="200.0" prefWidth="163.0" />
-            <Label alignment="CENTER" prefHeight="20.0" prefWidth="126.0" text="YOUR MODELS">
+            <Label fx:id="labelMyModels" alignment="CENTER" prefHeight="20.0" prefWidth="186.0" text="MY MODELS">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -153,7 +85,7 @@
       </VBox>
    </left>
    <center>
-      <AnchorPane prefHeight="662.0" prefWidth="770.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="658.0" prefWidth="864.0" BorderPane.alignment="CENTER">
          <children>
             <TabPane layoutX="5.0" prefHeight="479.0" prefWidth="852.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
@@ -381,7 +313,7 @@
                   </Label>
                </children>
             </VBox>
-            <HBox layoutX="14.0" layoutY="621.0" prefHeight="37.0" prefWidth="821.0" style="-fx-border-color: black;">
+            <HBox layoutX="14.0" layoutY="621.0" prefHeight="31.0" prefWidth="821.0" style="-fx-border-color: black;">
                <children>
                   <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" text="CHAT">
                      <font>
@@ -396,4 +328,145 @@
          </children>
       </AnchorPane>
    </center>
+   <right>
+      <ScrollPane prefHeight="652.0" prefWidth="226.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox prefHeight="667.0" prefWidth="206.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="28.0" prefWidth="206.0" style="-fx-background-color: LIGHTGREEN; -fx-border-color: BLACK;" text="MODEL NR1" textAlignment="CENTER" />
+                  <AnchorPane prefHeight="41.0" prefWidth="206.0">
+                     <children>
+                        <ImageView fx:id="modelProfilePic" fitHeight="124.0" fitWidth="102.0" layoutX="44.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/avatar.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <opaqueInsets>
+                        <Insets top="20.0" />
+                     </opaqueInsets>
+                  </AnchorPane>
+                  <Label fx:id="selectedModelNickname" alignment="CENTER" prefHeight="35.0" prefWidth="206.0" text="NickName" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView prefHeight="137.0" prefWidth="206.0">
+                     <columns>
+                        <TableColumn minWidth="-Infinity" prefWidth="100.0" text="Earnings">
+                           <columns>
+                              <TableColumn minWidth="-Infinity" prefWidth="126.0" text="Total this Session" />
+                              <TableColumn minWidth="-Infinity" prefWidth="74.0" text="2300$" />
+                           </columns>
+                        </TableColumn>
+                     </columns>
+                  </TableView>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="206.0" text="Time Online">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane prefHeight="113.0" prefWidth="206.0">
+                     <children>
+                        <Label layoutX="1.0" layoutY="-1.0" prefHeight="18.0" prefWidth="117.0" text="Total this session">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="22.0" prefHeight="18.0" prefWidth="117.0" text="Free Chat">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="38.0" prefHeight="18.0" prefWidth="117.0" text="Private Chat">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="53.0" prefHeight="18.0" prefWidth="117.0" text="Member Chat">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="69.0" prefHeight="18.0" prefWidth="117.0" text="Vip Show">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="freeChatTotal" layoutX="106.0" layoutY="23.0" prefHeight="20.0" prefWidth="95.0" text="00:00:00">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="privateChatTotal" layoutX="106.0" layoutY="38.0" prefHeight="20.0" prefWidth="95.0" text="00:00:00">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="memberChatTotal" layoutX="106.0" layoutY="53.0" prefHeight="20.0" prefWidth="95.0" text="00:00:00">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="vipChatTotal" layoutX="106.0" layoutY="68.0" prefHeight="20.0" prefWidth="95.0" text="00:00:00">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalTime" layoutX="132.0" layoutY="1.0" prefHeight="20.0" prefWidth="72.0" text="00:00:00">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <HBox prefHeight="54.0" prefWidth="206.0">
+                     <children>
+                        <Button graphicTextGap="1.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="115.0" text="CHECK ONLINE">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="116.0" text="VIEW PROFILE">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="203.0" text="Shift Timeline" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane fx:id="charts2" maxHeight="21.0" prefHeight="4.0" prefWidth="180.0" style="-fx-border-color: orange;">
+                     <VBox.margin>
+                        <Insets left="11.0" right="11.0" />
+                     </VBox.margin>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="117.0" prefWidth="206.0">
+                     <children>
+                        <Label layoutX="27.0" layoutY="9.0" text="- free chat" />
+                        <Label layoutX="7.0" layoutY="31.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: orange;" />
+                        <Label layoutX="27.0" layoutY="31.0" text="- private chat" />
+                        <Label layoutX="7.0" layoutY="53.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: blue;" />
+                        <Label layoutX="23.0" layoutY="53.0" text="- member chat" />
+                        <Label layoutX="115.0" layoutY="9.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: magenta;" />
+                        <Label layoutX="132.0" layoutY="9.0" text="- vip show" />
+                        <Label layoutX="115.0" layoutY="31.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: red;" />
+                        <Label layoutX="132.0" layoutY="31.0" text="- offline" />
+                        <Label layoutX="7.0" layoutY="9.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: green;" />
+                     </children>
+                  </AnchorPane>
+                  <Label prefHeight="52.0" prefWidth="206.0" text="NOTES AND FEEDBACK">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextArea prefHeight="127.0" prefWidth="206.0" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </right>
 </BorderPane>
