@@ -30,10 +30,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -99,8 +101,14 @@ public class FXMLDocumentController implements Initializable {
                     System.out.println("data from response: " + datares);
                     String name = datares.getAsJsonPrimitive("name").getAsString();
                     String email = datares.getAsJsonPrimitive("email").getAsString();
+                    String profile = datares.getAsJsonPrimitive("profile").getAsString();
+                    int studio = datares.getAsJsonPrimitive("studio").getAsInt();
+                    String studioName = datares.getAsJsonPrimitive("studioName").getAsString();
                     train.name = name;
                     train.email = email;
+                    train.profile = profile;
+                    train.studio = studio;
+                    train.studioName = studioName;
 
                     Stage stage2 = (Stage) closeButton.getScene().getWindow();
                     stage2.close();
@@ -110,6 +118,21 @@ public class FXMLDocumentController implements Initializable {
                         Parent rootl = (Parent) fxmlLoader.load();
 
                         Stage stage = new Stage();
+                        
+                        stage.setScene(new Scene(rootl));
+                        
+                        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+                        //set Stage boundaries to visible bounds of the main screen
+
+                        double width = primaryScreenBounds.getWidth();
+                        double height = primaryScreenBounds.getHeight();
+
+                        stage.setX((width - (width * 0.9))/2);
+                        stage.setY((height - (height * 0.9))/2);
+                        stage.setWidth(width * 0.9);
+                        stage.setHeight(height * 0.9);
+        
                         stage.initStyle(StageStyle.UNDECORATED);
                         stage.setTitle("Admin Dashboard");
 
@@ -131,7 +154,7 @@ public class FXMLDocumentController implements Initializable {
                             }
                         });
 
-                        stage.setScene(new Scene(rootl));
+                        
                         stage.show();
 
                     } catch (IOException e) {

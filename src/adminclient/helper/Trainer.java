@@ -20,6 +20,9 @@ public class Trainer {
         
         public String name;
         public String email;
+        public String profile;
+        public int studio;
+        public String studioName;
         
         
 
@@ -28,6 +31,9 @@ public class Trainer {
     { 
         name = "notInit"; 
         email = "notInit@notInit.com";
+        profile = "www.notInit.com";
+        studio = 0;
+        studioName = "Studio Error";
        
     }
     

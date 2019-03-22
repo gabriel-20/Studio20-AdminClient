@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,12 +17,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.stage.Screen?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1306.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminclient.FXMLAdminDashbordController">
-   <bottom>
-      <AnchorPane prefHeight="47.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminclient.FXMLAdminDashbordController">
+   <fx:define>
+    <Screen fx:factory="getPrimary" fx:id="screen" />
+</fx:define>
+    <bottom>
+      <AnchorPane prefHeight="${screen.visualBounds.height*0.05}" prefWidth="${screen.visualBounds.width}" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutX="-1.0" layoutY="3.0" prefHeight="41.0" prefWidth="1248.0" text="\@COPYRIGHT 2019 - STUDIO 20" textAlignment="CENTER">
+            <Label alignment="CENTER" layoutX="-1.0" layoutY="3.0" prefHeight="41.0" prefWidth="${screen.visualBounds.width}" text="\@COPYRIGHT 2019 - STUDIO 20" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -30,13 +35,13 @@
       </AnchorPane>
    </bottom>
    <top>
-      <VBox prefHeight="131.0" prefWidth="927.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
+      <VBox  minHeight="90" minWidth="1400" prefHeight="${screen.visualBounds.height*0.15}" prefWidth="${screen.visualBounds.width}" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
                   <VBox layoutX="8.0" layoutY="24.0" prefHeight="82.0" prefWidth="174.0" style="-fx-border-color: red;">
                      <children>
-                        <ImageView fitHeight="111.0" fitWidth="222.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="trainerProfile" fitHeight="111.0" fitWidth="222.0" pickOnBounds="true" preserveRatio="true">
                            <VBox.margin>
                               <Insets left="25.0" right="25.0" />
                            </VBox.margin>
@@ -51,7 +56,12 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="1219.0" layoutY="12.0" onMouseClicked="#handleClose" text="X" textFill="RED">
+                  <Label fx:id="trainerStudio" layoutX="199.0" layoutY="40.0" prefHeight="55.0" prefWidth="205.0" text="Studio">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1650.0" layoutY="12.0" onMouseClicked="#handleClose" text="X" textFill="RED">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -67,158 +77,164 @@
       </VBox>
    </top>
    <left>
-      <VBox prefHeight="662.0" prefWidth="188.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
+      <VBox minHeight="400" minWidth="210" maxHeight="${screen.visualBounds.height*0.80}" maxWidth="${screen.visualBounds.width*0.15}" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="labelAllModels" alignment="CENTER" prefHeight="20.0" prefWidth="186.0" text="ALL MODELS" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
+            <HBox id="HBox" alignment="CENTER" spacing="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                <children>
+                  <Label text="Filter :" />
+                  <TextField fx:id="filterField" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+                </children>
+              </HBox>
             <AnchorPane fx:id="scrollModels" prefHeight="200.0" prefWidth="163.0" />
             <Label fx:id="labelMyModels" alignment="CENTER" prefHeight="20.0" prefWidth="186.0" text="MY MODELS">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <AnchorPane fx:id="scrollMyModels" maxHeight="410.0" maxWidth="186.0" prefHeight="410.0" prefWidth="186.0" />
+            <AnchorPane fx:id="scrollMyModels" maxHeight="110.0" maxWidth="186.0" prefHeight="110.0" prefWidth="186.0" />
          </children>
       </VBox>
    </left>
    <center>
-      <AnchorPane prefHeight="658.0" prefWidth="864.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="650" minWidth="800" prefWidth="${screen.visualBounds.width*0.6}" BorderPane.alignment="CENTER">
          <children>
-            <TabPane layoutX="5.0" prefHeight="479.0" prefWidth="852.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="aDashboard" layoutX="5.0" prefHeight="480.0" minWidth="800" prefWidth="${screen.visualBounds.width*0.6}" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="DASHBOARD">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="296.0" prefWidth="826.0">
+                    <AnchorPane   prefHeight="296.0" minWidth="800" prefWidth="${aDashboard.width}">
                            <children>
-                              <ScrollPane layoutX="14.0" layoutY="34.0" prefHeight="188.0" prefWidth="842.0">
+                              <ScrollPane layoutX="14.0" layoutY="34.0" prefHeight="188.0" minWidth="750" prefWidth="${aDashboard.width*0.98}">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="241.0" prefWidth="842.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="241.0" prefWidth="${aDashboard.width*0.95}">
                                        <children>
-                                          <HBox prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox fx:id="hDashboard" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;" text="Prepare for start of shift! Please read the report and alocate your models!">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.70}" style="-fx-border-color: #9c1b21;" text="Prepare for start of shift! Please read the report and alocate your models!">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-border-color: #9c1b21;" text="hh:mm">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: green;" text="DONE" textFill="WHITE" />
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-background-color: green;" text="DONE" textFill="WHITE" />
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="46.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="46.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;" text="Trainers 2'nd task for the shift!">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.70}" style="-fx-border-color: #9c1b21;" text="Trainers 2'nd task for the shift!">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-border-color: #9c1b21;" text="hh:mm">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="92.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="92.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;" text="Trainers 3'nd task for the shift!">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.70}" style="-fx-border-color: #9c1b21;" text="Trainers 3'nd task for the shift!">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-border-color: #9c1b21;" text="hh:mm">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="139.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="139.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.70}" style="-fx-border-color: #9c1b21;">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-border-color: #9c1b21;" text="hh:mm">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="185.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="185.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="45.0" prefWidth="666.0" style="-fx-border-color: #9c1b21;">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.70}" style="-fx-border-color: #9c1b21;">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Label prefHeight="45.0" prefWidth="72.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                <Label prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-border-color: #9c1b21;" text="hh:mm">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="87.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                                <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="${hDashboard.width*0.15}" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
                                              </children>
                                           </HBox>
                                        </children>
                                     </AnchorPane>
                                 </content>
                               </ScrollPane>
-                              <ScrollPane layoutX="15.0" layoutY="250.0" prefHeight="153.0" prefWidth="841.0">
+                              <ScrollPane layoutX="15.0" layoutY="250.0" prefHeight="153.0" prefWidth="${aDashboard.width*0.98}">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="245.0" prefWidth="826.0">
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="245.0" prefWidth="${aDashboard.width*0.95}">
                                        <children>
-                                          <HBox prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                <Label prefHeight="43.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="46.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="46.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                <Label prefHeight="43.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="92.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="92.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                <Label prefHeight="43.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="138.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="138.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                <Label prefHeight="43.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </HBox>
-                                          <HBox layoutY="184.0" prefHeight="45.0" prefWidth="843.0" style="-fx-border-color: #9c1b21;">
+                                          <HBox layoutY="184.0" prefHeight="45.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;">
                                              <children>
-                                                <Label prefHeight="43.0" prefWidth="825.0" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
+                                                <Label prefHeight="43.0" prefWidth="${aDashboard.width*0.95}" style="-fx-border-color: #9c1b21;" text="The model &quot;nick-name&quot; (href on click = open model profile) is online !">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -255,67 +271,26 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <TabPane layoutX="14.0" layoutY="470.0" prefHeight="151.0" prefWidth="665.0" style="-fx-border-color: black;" tabClosingPolicy="UNAVAILABLE">
+            
+            <VBox fx:id="vboxChat" layoutX="14.0" layoutY="470.0" prefHeight="250.0" prefWidth="${aDashboard.width}" style="-fx-border-color: black;">
+            
+            <TabPane  fx:id="tabpaneChat" layoutX="14.0" layoutY="470.0" prefHeight="215.0" prefWidth="${aDashboard.width}" style="-fx-border-color: black;">
               <tabs>
-                <Tab text="GENERAL CHAT">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="70.0" prefWidth="665.0" />
-                  </content>
+                <Tab closable="false" text="GENERAL CHAT">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <VBox fx:id="chatArea" prefHeight="94.0" prefWidth="651.0" />
+                           </content>
+                        </ScrollPane>
+                     </content>
                 </Tab>
-                <Tab text="MODEL NR1">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                </Tab>
-                  <Tab text="MODEL NR2">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                  </Tab>
-                  <Tab text="MODEL NR3">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                  </Tab>
-                  <Tab text="MODEL NR4">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                  </Tab>
-                  <Tab text="MODEL NR5">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                  </Tab>
               </tabs>
             </TabPane>
-            <VBox layoutX="679.0" layoutY="470.0" prefHeight="151.0" prefWidth="156.0" style="-fx-border-color: black;">
+
+            <HBox fx:id="hBoxChat" layoutX="14.0" layoutY="608.0" prefHeight="35.0" prefWidth="${tabpaneChat.width}" style="-fx-border-color: black;">
                <children>
-                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR3">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="169.0" text="MODEL NR4">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-            <HBox layoutX="14.0" layoutY="621.0" prefHeight="31.0" prefWidth="821.0" style="-fx-border-color: black;">
-               <children>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" text="CHAT">
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#handleChat" prefHeight="31.0" prefWidth="${hBoxChat.width*0.10}" text="CHAT">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -323,20 +298,24 @@
                         <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                      </HBox.margin>
                   </Button>
+                  <TextField fx:id="chatField" prefHeight="31.0" prefWidth="${hBoxChat.width*0.90}" />
                </children>
             </HBox>
+            
+            </VBox>
+            
          </children>
       </AnchorPane>
    </center>
    <right>
-      <ScrollPane prefHeight="652.0" prefWidth="226.0" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="rScrollBox" minHeight="400" minWidth="210" prefHeight="${screen.visualBounds.height*0.80}" prefWidth="${screen.visualBounds.width*0.15}" BorderPane.alignment="CENTER">
          <content>
-            <VBox prefHeight="667.0" prefWidth="206.0">
+            <VBox minHeight="400" minWidth="200" prefWidth="${rScrollBox.width*0.98}">
                <children>
-                  <Label alignment="CENTER" prefHeight="28.0" prefWidth="206.0" style="-fx-background-color: LIGHTGREEN; -fx-border-color: BLACK;" text="MODEL NR1" textAlignment="CENTER" />
-                  <AnchorPane prefHeight="41.0" prefWidth="206.0">
+                  <Label fx:id="selectedModelNickname" alignment="CENTER" prefHeight="28.0" prefWidth="${rScrollBox.width*0.98}" style="-fx-background-color: LIGHTGREEN; -fx-border-color: BLACK;" text="NickName" textAlignment="CENTER" />
+                  <AnchorPane prefHeight="41.0" prefWidth="${rScrollBox.width*0.98}">
                      <children>
-                        <ImageView fx:id="modelProfilePic" fitHeight="124.0" fitWidth="102.0" layoutX="44.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="modelProfilePic" fitHeight="160.0" fitWidth="160.0" layoutX="44.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/avatar.jpg" />
                            </image>
@@ -346,22 +325,23 @@
                         <Insets top="20.0" />
                      </opaqueInsets>
                   </AnchorPane>
-                  <Label fx:id="selectedModelNickname" alignment="CENTER" prefHeight="35.0" prefWidth="206.0" text="NickName" textAlignment="CENTER">
+                 <Label fx:id="modelTotalPeriod" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="${rScrollBox.width*0.98}" text="Total This Period">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font>
-                  </Label>
-                  <TableView prefHeight="137.0" prefWidth="206.0">
+                 </Label>
+                 <TableView fx:id="tableSales" prefHeight="137.0" prefWidth="${rScrollBox.width*0.98}" />
+<!--                  <TableView prefHeight="137.0" prefWidth="${rScrollBox.width*0.98}">
                      <columns>
-                        <TableColumn minWidth="-Infinity" prefWidth="100.0" text="Earnings">
+                        <TableColumn fx:id="rParentTable" minWidth="-Infinity" prefWidth="${rScrollBox.width*0.98}" text="Earnings">
                            <columns>
-                              <TableColumn minWidth="-Infinity" prefWidth="126.0" text="Total this Session" />
-                              <TableColumn minWidth="-Infinity" prefWidth="74.0" text="2300$" />
+                              <TableColumn minWidth="-Infinity" prefWidth="${rParentTable.width*0.5}" text="Total this Period" />
+                              <TableColumn fx:id="modelTotalPeriod" minWidth="-Infinity" prefWidth="${rParentTable.width*0.5}" text="0 $" />
                            </columns>
                         </TableColumn>
                      </columns>
-                  </TableView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="206.0" text="Time Online">
+                  </TableView>-->
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="${rScrollBox.width*0.98}" text="Time Online">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -420,31 +400,33 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <HBox prefHeight="54.0" prefWidth="206.0">
+                  <HBox fx:id="rBtnBox" prefHeight="54.0" prefWidth="${rScrollBox.width*0.98}">
                      <children>
-                        <Button graphicTextGap="1.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="115.0" text="CHECK ONLINE">
+                        <Button graphicTextGap="1.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="${rBtnBox.width*0.5}" text="CHECK ONLINE">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="116.0" text="VIEW PROFILE">
+                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="${rBtnBox.width*0.5}" text="VIEW PROFILE">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </Button>
                      </children>
                   </HBox>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="203.0" text="Shift Timeline" textAlignment="CENTER">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="${rScrollBox.width*0.98}" text="Shift Timeline" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <AnchorPane fx:id="charts2" maxHeight="21.0" prefHeight="4.0" prefWidth="180.0" style="-fx-border-color: orange;">
+                  <AnchorPane fx:id="charts2" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="${rScrollBox.width*0.98}" style="-fx-border-color: orange;">
                      <VBox.margin>
                         <Insets left="11.0" right="11.0" />
                      </VBox.margin>
                   </AnchorPane>
-                  <AnchorPane prefHeight="117.0" prefWidth="206.0">
+                  <Label fx:id="startTime" layoutX="16.0" layoutY="595.0" prefHeight="17.0" prefWidth="193.0" text="Start Shift:" />
+                  <Label fx:id="endTime" layoutX="16.0" layoutY="612.0" prefHeight="17.0" prefWidth="185.0" text="Current: " />
+                  <AnchorPane prefHeight="117.0" prefWidth="${rScrollBox.width*0.98}">
                      <children>
                         <Label layoutX="27.0" layoutY="9.0" text="- free chat" />
                         <Label layoutX="7.0" layoutY="31.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: orange;" />
@@ -458,12 +440,12 @@
                         <Label layoutX="7.0" layoutY="9.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: green;" />
                      </children>
                   </AnchorPane>
-                  <Label prefHeight="52.0" prefWidth="206.0" text="NOTES AND FEEDBACK">
+                  <Label prefHeight="52.0" prefWidth="${rScrollBox.width*0.98}" text="NOTES AND FEEDBACK">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextArea prefHeight="127.0" prefWidth="206.0" />
+                  <TextArea prefHeight="127.0" prefWidth="${rScrollBox.visualBounds.width}" />
                </children>
             </VBox>
          </content>
