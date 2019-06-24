@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="200.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminclient.FXMLModalController2">
+    <stylesheets>
+        <URL value="@fxmlmodal.css" />
+    </stylesheets>
+   <children>
+      <HBox prefHeight="16.0" prefWidth="198.0">
+         <children>
+            <Label fx:id="modelnameModal" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="198.0" style="-fx-background-color: white;" text="    End Shift" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="closeButton" alignment="TOP_RIGHT" contentDisplay="RIGHT" onMouseClicked="#closeButtonAction" prefHeight="27.0" prefWidth="28.0" style="-fx-background-color: white;" text="X" textAlignment="RIGHT" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <VBox alignment="CENTER" layoutX="49.0" prefHeight="171.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label text="END SHIFT?">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="btnEndShift" mnemonicParsing="false" text="Yes" textFill="RED">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+<!--      <Button fx:id="removeModal" mnemonicParsing="false" text="Remove">
+         <VBox.margin>
+            <Insets bottom="10.0" top="10.0" />
+         </VBox.margin>
+      </Button>-->
+   </children>
+</VBox>

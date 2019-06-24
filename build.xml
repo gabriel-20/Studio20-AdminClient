@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!-- You may freely edit this file. See commented blocks below for --><!-- some examples of how to customize the build. --><!-- (If you delete it and reopen the project it will be recreated.) --><!-- By default, only the Clean and Build commands use this build script. --><project name="AdminClient" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
     <description>Builds, tests, and runs the project AdminClient.</description>
     <import file="nbproject/build-impl.xml"/>
+
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -50,4 +51,10 @@
     nbproject/build-impl.xml and nbproject/jfx-impl.xml.
 
     -->
+    <target name="-post-jfx-deploy" description="Sets the buildversion for the current build">
+        <propertyfile file="${src.dir}/adminclient/AdminClient.properties">
+            <entry key="Application.buildnumber" value="1" type="int" operation="+"/>
+        </propertyfile>
+    </target>
+    
 </project>

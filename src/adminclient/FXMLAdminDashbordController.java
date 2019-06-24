@@ -5,6 +5,7 @@
  */
 package adminclient;
 
+import static adminclient.helper.Global.APP_SHIFT_REPORT;
 import static adminclient.helper.Global.SOCKETIO;
 import adminclient.helper.ModelsObj;
 import adminclient.helper.MyModelsObj;
@@ -13,45 +14,62 @@ import adminclient.helper.Trainer;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.BrowserContext;
+import com.teamdev.jxbrowser.chromium.BrowserContextParams;
+import com.teamdev.jxbrowser.chromium.BrowserType;
+import com.teamdev.jxbrowser.chromium.CustomProxyConfig;
+import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
+import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
+import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
+import org.controlsfx.control.Notifications;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
+import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -59,6 +77,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -70,14 +89,19 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
+import javax.imageio.ImageIO;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -88,6 +112,12 @@ import okhttp3.OkHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import potato.jx.crack.JxBrowserHackUtil;
+import potato.jx.crack.JxVersion;
 
 /**
  *
@@ -98,11 +128,38 @@ public class FXMLAdminDashbordController implements Initializable {
     private Socket socket;
 
     private int initval = 0;
+    
+    private String selectedModel = "";
 
-    String localModelProfile;
+    private String localModelProfile;
+    
+    private Browser browser;
+    
+    private BrowserView webView;
 
     @FXML
     private TextField filterField;
+    
+    double screenHeight, screenWidth;
+    
+    double size;
+    
+    private Stage dialogModelStage;
+    
+    @FXML
+    private BorderPane vpnA, mainBorderPane;
+    
+    @FXML
+    private VBox notificationBox, vBoxLeft, vBoxCenter, vboxChat;
+    
+    @FXML
+    private TabPane aDashboard;
+    
+    @FXML
+    private ScrollPane rScrollBox, centerScrollPane, notificationScroll;
+
+    @FXML
+    private Button taskBtn1, taskBtn2, taskBtn3, taskBtn4, taskBtn5;
 
     @FXML
     private TableView<Sales> tableSales;
@@ -115,15 +172,27 @@ public class FXMLAdminDashbordController implements Initializable {
 
     @FXML
     private Label modelTotalPeriod;
+    
+    @FXML
+    private TextField artisticEmail, artisticPassword;
+    
+    @FXML
+    private Tab vpn;
 
     @FXML
-    private AnchorPane scrollModels, scrollMyModels;
+    private AnchorPane scrollModels, scrollMyModels, anchorPaneCenter, anchorPaneChat;
 
     @FXML
     private Label trainerName, trainerStudio, selectedModelNickname, labelAllModels, labelMyModels, startTime, endTime;
 
     @FXML
-    private Label freeChatTotal, privateChatTotal, memberChatTotal, vipChatTotal, totalTime;
+    private javafx.scene.control.Button closeButton;
+
+    @FXML
+    private Label freeChatTotal, privateChatTotal, memberChatTotal, vipChatTotal, offlineTotal, totalTime;
+
+    @FXML
+    private Label lbltaskBtn1, lbltaskBtn2, lbltaskBtn3, minIcon;
 
     @FXML
     private AnchorPane charts2;
@@ -136,6 +205,26 @@ public class FXMLAdminDashbordController implements Initializable {
 
     @FXML
     private TextField chatField;
+    
+    @FXML
+    private TextField shiftRoomInput, shiftPlaceInput, shiftPointsInput;
+    
+    @FXML
+    private TextArea shiftFieldInput1, shiftFieldInput2, shiftFieldInput3, shiftFieldInput4, shiftFieldInput5;
+    
+    @FXML
+    private Button shiftBtnSave;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+    
+    String model_artistic_email = "no email";
+    String model_artistic_password = "no password";
+    
+    private double tabChatSize;
+    
+    //private final HostServices services;
+
 
     @FXML
     private void handleClose(MouseEvent event) {
@@ -145,6 +234,162 @@ public class FXMLAdminDashbordController implements Initializable {
     @FXML
     private void handleChat(MouseEvent event) {
         sendChatMessage();
+    }
+    
+    @FXML
+    private void saveShiftFeedback(ActionEvent event) {
+        
+        String room = shiftRoomInput.getText();
+        
+        String place = shiftPlaceInput.getText();
+        
+        String points = shiftPointsInput.getText();
+        
+        String field1 = shiftFieldInput1.getText();
+        
+        String field2 = shiftFieldInput2.getText();
+        
+        String field3 = shiftFieldInput3.getText();
+        
+        String field4 = shiftFieldInput4.getText();
+        
+        String field5 = shiftFieldInput5.getText();
+        
+        String[] dataJson = {trainer.id+"", selectedModel, room, place, points, field1, field2, field3, field4, field5};
+        JSONArray mJArray = new JSONArray(Arrays.asList(dataJson));
+        
+        System.out.println("Send Shift report data: " + mJArray);
+        socket.emit("sendShiftReportData", mJArray);
+        
+    }
+   
+    
+     @FXML
+    private void takePicture(MouseEvent event) {
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                   
+                        WritableImage image = webView.snapshot(new SnapshotParameters(), null);
+    
+                        // TODO: probably use a file chooser here
+                        Date date= new Date();
+                        long time = date.getTime();
+                        String filename = selectedModel+"-"+time+".png";
+                        File file = new File(filename);
+
+                        try {
+                            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+                            System.out.println("pic take!!");
+                        } catch (IOException e) {
+                            // TODO: handle exception here
+                        }
+                    
+                } catch (Exception ignored) {}
+                finally {
+                    // Dispose Browser instance
+                    //browser.dispose();
+                }
+            }
+        });
+    }
+    
+    @FXML
+    private void modelCenterLogin(MouseEvent event) {
+        System.out.println("Click view profile");
+
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://modelcenter.jasmin.com/en/login");
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception {
+
+                Thread.sleep(2000);
+
+                WebElement emailBox = null;
+                WebElement passBox = null;
+
+                List<WebElement> someElements = driver.findElements(By.cssSelector("input"));
+
+                for (WebElement anElement : someElements) {
+                    if (anElement.getAttribute("type").equals("email")) {
+                        emailBox = anElement;
+                    }
+
+                    if (anElement.getAttribute("type").equals("password")) {
+                        passBox = anElement;
+                    }
+                }
+
+                emailBox.sendKeys(model_artistic_email);
+                passBox.sendKeys(model_artistic_password);
+                System.out.println(model_artistic_email + " : " + model_artistic_password);
+
+                return null;
+            }
+        };
+        task.setOnSucceeded(ee -> {
+
+        });
+        new Thread(task).start();
+
+    }
+    
+    
+    @FXML
+    private void handleTask(MouseEvent event) throws URISyntaxException {
+        
+        if (!trainer.isShift) {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            String[] dataMessage = new String[2];
+            dataMessage[0] = trainer.id+"";
+            dataMessage[1] = timestamp.toString();
+            JSONArray mJSONArray = new JSONArray(Arrays.asList(dataMessage));
+            
+            Date date = new Date();
+            String strDateFormat = "HH:mm";
+            DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+            String formattedDate = dateFormat.format(date);
+            lbltaskBtn1.setText(formattedDate);
+        
+
+            enableFirstTask();
+            socket.emit("TRAINER_START_SHIFT", mJSONArray);
+            trainer.isShift = true;
+        } else {
+            
+            try {
+                java.awt.Desktop.getDesktop().browse(new URI(APP_SHIFT_REPORT));
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLAdminDashbordController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+    }
+    
+    private void enableSecondTask(){
+        
+        lbltaskBtn2.setText(trainer.shiftEnd);
+        taskBtn2.setText("SHIFT FINISH");
+        taskBtn2.setStyle("-fx-background-color: red;");
+        
+        
+        
+    }
+    
+    private void enableFirstTask(){
+         
+        taskBtn1.setText("VIEW SHIFT");
+        taskBtn1.setStyle("-fx-background-color: green;");
+        
+        if (trainer.isShift) lbltaskBtn1.setText(trainer.shiftStart);
+    
     }
 
     private void sendChatMessage() {
@@ -176,6 +421,7 @@ public class FXMLAdminDashbordController implements Initializable {
     int total_private = 0;
     int total_member = 0;
     int total_vip = 0;
+    int total_offline = 0;
     int total_time = 0;
 
     private TableView table = new TableView();
@@ -196,6 +442,76 @@ public class FXMLAdminDashbordController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+        
+        if (trainer.isShift){
+            enableFirstTask();
+        }
+        
+        if (trainer.isShiftEnd){
+            enableSecondTask();
+        }
+        
+        
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        screenHeight = primaryScreenBounds.getHeight();
+        screenWidth= primaryScreenBounds.getWidth();
+        
+        //mainBorderPane
+        
+        //System.out.println("Screen width : " + screenWidth);
+        //System.out.println("Screen height : " + screenHeight);
+        
+        mainBorderPane.setMinWidth(screenWidth-400);
+        mainBorderPane.setMaxWidth(screenWidth-400);
+        
+        //vBoxCenter.setMaxWidth(screenWidth - 700);
+        //vBoxCenter.setPrefWidth(screenWidth - 700);
+        
+        size = screenHeight-170;
+        
+        aDashboard.setMaxHeight(size - (size/3) - 110);
+        aDashboard.setPrefHeight(size - (size/3) - 110);
+        
+        aDashboard.getSelectionModel().selectedItemProperty().addListener(
+            new ChangeListener<Tab>() {
+                @Override
+                public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+                    //System.out.println("Tab Selection changed");
+                    
+                    startProxyBrowser();
+                }
+            }
+        );
+        
+        anchorPaneChat.setMaxHeight(size/3);
+        anchorPaneChat.setPrefHeight(size/3);
+        
+        vboxChat.setMaxHeight(size/3);
+        vboxChat.setPrefHeight(size/3);
+                
+        shiftBtnSave.setDisable(true);
+        rScrollBox.setMaxHeight(screenHeight-270);
+        rScrollBox.setPrefHeight(screenHeight-270);
+        
+        
+        //notificationScroll.setMaxHeight(aDashboard.getHeight() - centerScrollPane.getHeight() - 50);
+        //notificationScroll.setPrefHeight(aDashboard.getHeight() - centerScrollPane.getHeight() - 50);
+        
+        notificationScroll.setMaxHeight(222);
+        notificationScroll.setPrefHeight(222);
+        
+        
+        //initBrowser();
+        
+           
+        minIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent me) {
+            Stage stage = (Stage) minIcon.getScene().getWindow();
+            stage.setIconified(true);
+        }
+    });
 
         TableColumn indexFieldCol = new TableColumn("#");
         indexFieldCol.setMinWidth(100);
@@ -224,7 +540,7 @@ public class FXMLAdminDashbordController implements Initializable {
             }
         });
 
-        System.out.println("trainer :" + trainer.profile);
+        //System.out.println("trainer :" + trainer.profile);
         Image image = new Image(trainer.profile);
         trainerProfile.setImage(image);
 
@@ -249,31 +565,86 @@ public class FXMLAdminDashbordController implements Initializable {
 
         myTable.setItems(myDataTable);
         myTable.getColumns().addAll(myFirstNameCol, myLastNameCol, myChatNameCol);
-        myTable.setMaxHeight(250);
-        myTable.setPrefHeight(250);
+        
+        
+        myTable.setMaxHeight((screenHeight-100)/3);
+        myTable.setPrefHeight((screenHeight-100)/3);
 
         scrollMyModels.getChildren().addAll(myTable);
-        scrollMyModels.setMaxHeight(250);
-        scrollMyModels.setPrefHeight(250);
-
-        myTable.setRowFactory(tv -> {
-            TableRow<MyModelsObj> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-
-                if ((event.getButton() == MouseButton.SECONDARY) && (!row.isEmpty())) {
+        scrollMyModels.setMaxHeight((screenHeight-100)/3);
+        scrollMyModels.setPrefHeight((screenHeight-100)/3);
+        
+        myTable.setRowFactory(tv -> new TableRow<MyModelsObj>(){
+            
+            @Override
+            public void updateItem(MyModelsObj item, boolean empty){
+                super.updateItem(item, empty);
+                
+                if (item == null){
+                    setStyle("");
+                } else if (item.isShift() && item.isShiftEnd()) setStyle("");
+                else if (item.isShift()) setStyle("-fx-background-color:green");
+                else setStyle("");
+                
+                this.setOnMouseClicked(event -> {
+                
+                    if ((event.getButton() == MouseButton.SECONDARY) && (!this.isEmpty())) {
                     System.out.println("click dreapta");
+                    System.out.println("Shift  started: " + this.getItem().isShift());
+                    System.out.println("Shift  end: " + this.getItem().isShiftEnd());
 
-                    String[] dataRegister = {trainer.name, row.getItem().getName(), String.valueOf(trainer.studio)};
+                    String[] dataRegister = {trainer.name, this.getItem().getName(), String.valueOf(trainer.studio)};
                     JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
-                    socket.emit("getOnlineTrainersStudio", mJSONArray);
+                    //socket.emit("getOnlineTrainersStudio", mJSONArray);
+                    
+                    showPopupTrainers(this.getItem().getName(), this.getItem().isShift(), this.getItem().isShiftEnd());
 
                 }
-
-                if (event.getClickCount() == 1 && (!row.isEmpty()) && (event.getButton() == MouseButton.PRIMARY)) {
-                    MyModelsObj rowData = row.getItem();
+                    
+                    if (event.getClickCount() == 1 && (!this.isEmpty()) && (event.getButton() == MouseButton.PRIMARY)) {
+                   
+                    MyModelsObj rowData = this.getItem();
                     String name = rowData.getName();
-                    System.out.println("Click on: " + name);
-
+                    //System.out.println("Click on: " + name);
+                    selectedModel = name;
+                    
+                    String tab1 = aDashboard.getSelectionModel().getSelectedItem().getText();
+                    
+                    if (tab1.equals("Check Online")) {
+                        execproxy();
+                    }
+                    
+                    //startProxyBrowser();
+                    
+                    if (this.getItem().isShift()) {
+                        //System.out.println("!!!!!!!!!" + this.getItem().getName() + " has shift started!!!!");
+                        shiftBtnSave.setDisable(false);
+                    }
+                    
+                    
+                    JsonObject jobj = rowData.getJobj();
+                    
+                    if (jobj != null) {
+                        System.out.println("jobj data : " + jobj);
+                        String room = jobj.get("room").isJsonNull() ? "" : jobj.get("room").getAsString();
+                        String place_awd = jobj.get("place_awd").isJsonNull() ? "" : jobj.get("place_awd").getAsString();
+                        String awd_points = jobj.get("awd_points").isJsonNull() ? "" : jobj.get("awd_points").getAsString();
+                        String field1 = jobj.get("field1").isJsonNull() ? "" : jobj.get("field1").getAsString();
+                        String field2 = jobj.get("field2").isJsonNull() ? "" : jobj.get("field2").getAsString();
+                        String field3 = jobj.get("field3").isJsonNull() ? "" : jobj.get("field3").getAsString();
+                        String field4 = jobj.get("field4").isJsonNull() ? "" : jobj.get("field4").getAsString();
+                        String field5 = jobj.get("field5").isJsonNull() ? "" : jobj.get("field5").getAsString();
+                        String field6 = jobj.get("field6").isJsonNull() ? "" : jobj.get("field6").getAsString();
+                        System.out.println("Data from if : OK");
+                        updateSelectedModelShiftReportUI(room, place_awd, awd_points, field1, field2, field3, field4, field5, field6);
+                    } else {
+                        System.out.println("Data from if : Not OK");
+                        updateSelectedModelShiftReportUI("", "", "", "", "", "", "", "", "");
+                    }
+                    
+                    String[] dataJson = {trainer.name, selectedModel};
+                    JSONArray mJArray = new JSONArray(Arrays.asList(dataJson));
+                    
                     Tab tab = new Tab(name);
                     tab.setOnClosed(new EventHandler<Event>() {
                         @Override
@@ -283,6 +654,9 @@ public class FXMLAdminDashbordController implements Initializable {
                             t.consume();
                         }
                     });
+                    
+                    String[] dataRegister = {trainer.name, name};
+                    JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
 
                     if (!openTabs.contains(name)) {
                         ScrollPane spane = new ScrollPane();
@@ -293,17 +667,57 @@ public class FXMLAdminDashbordController implements Initializable {
                         tabpaneChat.getTabs().add(tab);
                         openTabs.add(name);
                         tabpaneChat.getSelectionModel().select(tab);
+                        socket.emit("trainergetchathistory", mJSONArray);
+
+                    }
+                    socket.emit("getmodelinfo", mJSONArray);
+                    
+                    PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        
+                    TextArea[] textArea = new TextArea[6];
+                    textArea[0] = shiftFieldInput1;
+                    textArea[1] = shiftFieldInput2;
+                    textArea[2] = shiftFieldInput3;
+                    textArea[3] = shiftFieldInput4;
+                    textArea[4] = shiftFieldInput5;
+
+                    TextField[] textField = new TextField[3];
+                    textField[0] = shiftRoomInput;
+                    textField[1] = shiftPlaceInput;
+                    textField[2] = shiftPointsInput;
+
+
+                    for (int i = 0; i < 5; i++){
+                        textArea[i].textProperty().addListener(new ChangeListener<String>() {
+                            @Override
+                            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                                // this will run whenever text is changed
+                                pause.setOnFinished(event -> shiftBtnSave.fire());
+                                pause.playFromStart();
+                                System.out.println("Change Detected!!!!");
+
+                            }
+                        });
                     }
 
-                    String[] dataRegister = {trainer.name, name};
-                    JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+                    for (int i = 0; i < 3; i++){
+                        textField[i].textProperty().addListener(new ChangeListener<String>() {
+                            @Override
+                            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                                // this will run whenever text is changed
+                                pause.setOnFinished(event -> shiftBtnSave.fire());
+                                pause.playFromStart();
+                                System.out.println("Change Detected!!!!");
 
-                    socket.emit("getmodelinfo", mJSONArray);
+                            }
+                        });
+                    }
 
                 }
-            });
-            return row;
+                });
+            }
         });
+
 
         TableColumn firstNameCol = new TableColumn("Model Name");
         TableColumn lastNameCol = new TableColumn("Status");
@@ -321,6 +735,9 @@ public class FXMLAdminDashbordController implements Initializable {
 
         table.setItems(filteredList);
         table.getColumns().addAll(firstNameCol, lastNameCol);
+        
+        table.setMaxHeight((screenHeight-100)/3);
+        table.setPrefHeight((screenHeight-100)/3);
 
         filterField.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -329,8 +746,11 @@ public class FXMLAdminDashbordController implements Initializable {
                 updateFilteredData();
             }
         });
+        
 
         scrollModels.getChildren().addAll(table);
+        scrollModels.setMaxHeight((screenHeight-100)/3);
+        scrollModels.setPrefHeight((screenHeight-100)/3);
 
         table.setRowFactory(tv -> {
             TableRow<ModelsObj> row = new TableRow<>();
@@ -341,7 +761,7 @@ public class FXMLAdminDashbordController implements Initializable {
 
                     JSONObject obj = new JSONObject();
                     try {
-                        obj.put("email", trainer.email);
+                        obj.put("id", trainer.id);
                         obj.put("models", rowData.getName());
                     } catch (JSONException ex) {
                         Logger.getLogger(FXMLAdminDashbordController.class.getName()).log(Level.SEVERE, null, ex);
@@ -349,6 +769,8 @@ public class FXMLAdminDashbordController implements Initializable {
 
                     socket.emit("updatemymodels", obj);
                     System.out.println("emit updatemymodels " + obj);
+
+                    socket.emit("getmymodels", trainer.id);
                     //updateMyModels(rowData.getName());
                 }
             });
@@ -362,6 +784,138 @@ public class FXMLAdminDashbordController implements Initializable {
         startWebSocketConnection();
 
     }
+    
+    public static final void saveAsPng(final Node NODE, final String FILE_NAME) {
+    final WritableImage SNAPSHOT = NODE.snapshot(new SnapshotParameters(), null);
+    final String        NAME     = FILE_NAME.replace("\\.[a-zA-Z]{3,4}", "");
+    final File          FILE     = new File(NAME + ".png");
+
+    try {
+        ImageIO.write(SwingFXUtils.fromFXImage(SNAPSHOT, null), "png", FILE);
+    } catch (IOException exception) {
+        // handle exception here
+    }
+}
+    
+    private void startProxyBrowser(){
+        
+        String tab = aDashboard.getSelectionModel().getSelectedItem().getText();
+        //System.out.println("Tab Selection changed   " + tab);
+                    
+                    if (tab.equals("Check Online")) {
+                        //webView
+                        initBrowser();
+                        execproxy();
+                        
+                        tabpaneChat.setPrefHeight(30);
+                        tabpaneChat.setMinHeight(30);
+                        tabpaneChat.setMaxHeight(30);
+                        
+                        anchorPaneChat.setPrefHeight(30);
+                        anchorPaneChat.setMinHeight(30);
+                        anchorPaneChat.setMaxHeight(30);
+                        
+                        aDashboard.setMaxHeight(size - 150);
+                        aDashboard.setPrefHeight(size - 150);
+                        aDashboard.setMinHeight(size - 150);
+                         
+                        vboxChat.setMaxHeight(30);
+                        vboxChat.setPrefHeight(30);
+                        vboxChat.setMinHeight(30);
+                                
+                    } 
+                    else {
+                        tabpaneChat.setPrefHeight(233);
+                        tabpaneChat.setMinHeight(233);
+                        tabpaneChat.setMaxHeight(233);
+                        anchorPaneChat.setPrefHeight(233);
+                        anchorPaneChat.setMinHeight(233);
+                        anchorPaneChat.setMaxHeight(233);
+                        
+                        aDashboard.setMaxHeight(size - (size/3) - 110);
+                        aDashboard.setPrefHeight(size - (size/3) - 110);
+                        aDashboard.setPrefHeight(size - (size/3) - 110);
+                        
+                        vboxChat.setMaxHeight(size/3);
+                        vboxChat.setPrefHeight(size/3);
+                        vboxChat.setMinHeight(size/3);
+
+                        if (webView != null) {
+                            webView.getChildren().clear();
+                            browser.dispose();
+                        }
+                        
+                    }
+    
+    }
+    
+    private void initBrowser(){
+    
+            JxBrowserHackUtil.hack(JxVersion.V6_22);
+            String identity = UUID.randomUUID().toString();
+
+            BrowserContextParams params = new BrowserContextParams("temp/browser/" + identity);
+
+            //String proxyRules = "http=136.243.76.199:3128;https=136.243.76.199:3128";
+            //String proxyRules = "http=157.230.246.199:8080;https=157.230.246.199:8080";
+            //String proxyRules = "http=142.93.103.225:3128;https=142.93.103.225:3128";
+            String proxyRules = trainer.proxy;
+            System.out.println("Proxy Url:" + proxyRules);
+
+            params.setProxyConfig(new CustomProxyConfig(proxyRules));
+
+            BrowserContext context1 = new BrowserContext(params);
+            browser = new Browser(BrowserType.LIGHTWEIGHT, context1);
+            
+            //vpn.setContent(null);
+            
+            webView = new BrowserView(browser);
+            
+            vpnA.setCenter(new BorderPane(webView));
+        
+            //vpn.setContent(webView);
+            
+            vpn.setContent(vpnA);
+    
+    }
+    
+    private void execproxy(){
+        
+            
+            
+            browser.loadURL("https://www.livejasmin.com/ro/chat-html5/" + selectedModel);
+            //browser.loadURL("https://www.google.com/");
+            
+            browser.addConsoleListener(new ConsoleListener() {
+                public void onMessage(ConsoleEvent event) {
+                    System.out.println("Message: " + event.getMessage());
+                }
+            });
+           
+    
+    }
+    
+    private void updateSelectedModelShiftReportUI(String room, String place_awd, String awd_points, String field1, String field2, String field3, String field4, String field5, String field6) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // Update UI here.
+                
+            shiftRoomInput.setText(room);
+            shiftPlaceInput.setText(place_awd);
+            shiftPointsInput.setText(awd_points);
+            shiftFieldInput1.setText(field1);
+            shiftFieldInput2.setText(field2);
+            shiftFieldInput3.setText(field3);
+            shiftFieldInput4.setText(field4);
+            shiftFieldInput5.setText(field5);
+
+            }
+        });
+
+    }
+    
 
     private void updateSelectedModelUI(String modelname, String profilePic, JsonObject jTotal) {
 
@@ -369,24 +923,21 @@ public class FXMLAdminDashbordController implements Initializable {
             @Override
             public void run() {
                 // Update UI here.
+                
+                artisticEmail.setText(model_artistic_email);
+                artisticPassword.setText(model_artistic_password);
                 selectedModelNickname.setText(modelname);
                 String imageUrl = "http:" + profilePic;
                 localModelProfile = imageUrl;
 
                 Image image = new Image(imageUrl);
                 modelProfilePic.setImage(image);
-                //System.out.println("PIC:" + profilePic);
 
-//                freeChatTotal.setText(String.valueOf(total_free));
-//                privateChatTotal.setText(String.valueOf(total_private));
-//                memberChatTotal.setText(String.valueOf(total_member));
-//                vipChatTotal.setText(String.valueOf(total_vip));
-//                totalTime.setText(String.valueOf(total_free + total_private + total_member + total_vip));
                 freeChatTotal.setText(formatSeconds(total_free));
-                //System.out.println("free:" + String.valueOf(total_free));
                 privateChatTotal.setText(formatSeconds(total_private));
                 memberChatTotal.setText(formatSeconds(total_member));
                 vipChatTotal.setText(formatSeconds(total_vip));
+                offlineTotal.setText(formatSeconds(total_offline));
                 totalTime.setText(formatSeconds(total_free + total_private + total_member + total_vip));
 
                 int total = jTotal.get("totalamount").getAsInt();
@@ -455,6 +1006,10 @@ public class FXMLAdminDashbordController implements Initializable {
                 if (status.equals("vip_show")) {
                     total_vip += (end - start);
                 }
+                
+                if (status.equals("offline")) {
+                    total_offline += (end - start);
+                }
 
                 Rectangle r = new Rectangle();
                 r.setX(lineStartX);
@@ -465,18 +1020,18 @@ public class FXMLAdminDashbordController implements Initializable {
                 Tooltip.install(r, tooltip);
 
                 if (status.equals("free_chat")) {
-                    r.setStroke(javafx.scene.paint.Color.GREEN);
-                    r.setFill(javafx.scene.paint.Color.GREEN);
+                    r.setStroke(javafx.scene.paint.Color.BLUE);
+                    r.setFill(javafx.scene.paint.Color.BLUE);
                 }
 
                 if (status.equals("private_chat")) {
-                    r.setStroke(javafx.scene.paint.Color.ORANGE);
-                    r.setFill(javafx.scene.paint.Color.ORANGE);
+                    r.setStroke(javafx.scene.paint.Color.RED);
+                    r.setFill(javafx.scene.paint.Color.RED);
                 }
 
                 if (status.equals("member_chat")) {
-                    r.setStroke(javafx.scene.paint.Color.BLUE);
-                    r.setFill(javafx.scene.paint.Color.BLUE);
+                    r.setStroke(javafx.scene.paint.Color.ORANGE);
+                    r.setFill(javafx.scene.paint.Color.ORANGE);
                 }
 
                 if (status.equals("vip_show")) {
@@ -485,8 +1040,8 @@ public class FXMLAdminDashbordController implements Initializable {
                 }
 
                 if (status.equals("offline")) {
-                    r.setStroke(javafx.scene.paint.Color.RED);
-                    r.setFill(javafx.scene.paint.Color.RED);
+                    r.setStroke(javafx.scene.paint.Color.WHITE);
+                    r.setFill(javafx.scene.paint.Color.WHITE);
                 }
 
                 charts2.getChildren().add(r);
@@ -521,45 +1076,162 @@ public class FXMLAdminDashbordController implements Initializable {
             @Override
             public void run() {
                 // Update UI here.
+
+                dataSales.clear();
                 charts2.getChildren().clear();
                 freeChatTotal.setText("00:00:00");
                 privateChatTotal.setText("00:00:00");
                 memberChatTotal.setText("00:00:00");
                 vipChatTotal.setText("00:00:00");
+                offlineTotal.setText("00:00:00");
                 totalTime.setText("00:00:00");
                 total_time = 0;
                 total_free = 0;
                 total_private = 0;
                 total_member = 0;
                 total_vip = 0;
+                total_offline = 0;
 
             }
         });
 
     }
-
-    private void updateMyModels(JsonArray arr) {
+    
+    private void clearChatArea() {
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 // Update UI here.
+                chatArea.getChildren().clear();
+
+            }
+        });
+    }
+    
+
+    private void updateMyModels(JsonArray arr) {
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // Update UI here.
+                
+                Date date = new Date();
+                String strDateFormat = "hh:mm";
+                DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+                String formattedDate = dateFormat.format(date);
+                
+                //showNotification("Status Update", "refresh", formattedDate);
+                
+                myDataTable.forEach((row) -> {
+                    System.out.println(row.getName() + " : " + row.getStatus());
+
+                    for (int i = 0; i < arr.size(); i++) {
+                        JsonObject job = arr.get(i).getAsJsonObject();
+                        String rName = job.get("name").getAsString();
+                        String rStatus = job.get("status").getAsString();
+                        String rChat = job.get("chat").getAsString();
+                        boolean rShift = job.get("shift").getAsBoolean();
+                                                
+
+                        if (rName.equals(row.getName())) {
+                            if (!rStatus.equals(row.getStatus())) {
+                                showNotification(rName, rStatus, formattedDate);
+                                System.out.println("status change detected " + rName + " - > " + rStatus + " - > " + row.getStatus());
+                            }
+                        }
+                    }
+
+                });
 
                 myDataTable.clear();
-
                 for (int i = 0; i < arr.size(); i++) {
                     JsonObject job = arr.get(i).getAsJsonObject();
                     String rName = job.get("name").getAsString();
                     String rStatus = job.get("status").getAsString();
                     String rChat = job.get("chat").getAsString();
-                    myDataTable.add(new MyModelsObj(rName, rStatus, rChat));
+                    boolean rShift = job.get("shift").getAsBoolean();
+                    
+                    
+                    JsonElement element = job.get("shiftReport");
+                    JsonObject shiftObj = null;
+                    if (!(element instanceof JsonNull)) {
+                        shiftObj = (JsonObject) element;
+                        //System.out.println("shift obj:" + shiftObj);
+                        
+                    }
+                        
+                    myDataTable.add(new MyModelsObj(rName, rStatus, rChat, rShift, shiftObj));
+                    
+//                    myTable.setRowFactory(tv -> {
+//                            TableRow<MyModelsObj> row = new TableRow<>();
+//
+//                            if (row.getItem().isShift()){
+//                                row.setStyle("-fxbackground-color:green");
+//                            }
+//
+//                            return row;
+//                        });
+                            
                 }
 
                 labelMyModels.setText("MY MODELS - " + String.valueOf(arr.size()));
+                //colorTable();
+                
 
             }
+            
         });
+        
+        
 
+    }
+    
+    private void colorTable(){
+
+        System.out.println("tstartr :" );
+        
+//       int i = 0; 
+//        for (Node n: myTable.lookupAll(".table-row-cell")) {
+//        System.out.println("tstartr 22:" );
+//            if (n instanceof TableRow) {
+//            System.out.println("tstartr 333:" );
+//                TableRow<MyModelsObj> row = (TableRow<MyModelsObj>) n;
+//                
+//                System.out.println("this row is :" + row.getItem().getName());
+//                if ( (row.getItem().isShift())) {
+//                    row.setStyle("-fx-background-color:lightgreen");
+//                }
+//                i++;
+//                if (i == myTable.getItems().size())
+//                  break;
+//                
+//            }
+//        
+//        }
+        
+        Set<Node> tableRowCell = myTable.lookupAll(".table-row-cell");
+    TableRow<?> row = null;
+    for (Node tableRow : tableRowCell) {
+        TableRow<?> r = (TableRow<?>) tableRow;
+//        if (r.getIndex() == rowIndex) {
+//            row = r;
+//            break;
+//        }
+        System.out.println("tstartr 22:" + r.getItem().toString());
+    }
+//    Set<Node> cells = row.lookupAll(".table-cell");
+//    for (Node node : cells) {
+//        TableCell<?, ?> cell = (TableCell<?, ?>) node;
+//        if (tableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex) {
+//            Bounds bounds = cell.getBoundsInParent();
+//            Point2D localToParent = cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
+//            Point2D rowLocal = row.localToScene(localToParent, true);
+//            return rowLocal;
+//        }
+//    }
+    
     }
 
     private void prepareChatTab(String train, String model, String message, String side, Timestamp timestamp) {
@@ -598,9 +1270,9 @@ public class FXMLAdminDashbordController implements Initializable {
                 imview.setClip(null);
                 imview.setImage(image2);
 
-                System.out.println("trainer: " + train);
-                System.out.println("model: " + model);
-                System.out.println("message: " + message);
+                //System.out.println("trainer: " + train);
+                //System.out.println("model: " + model);
+                //System.out.println("message: " + message);
 
                 Tab tab = new Tab(model);
                 tab.setOnClosed(new EventHandler<Event>() {
@@ -665,57 +1337,370 @@ public class FXMLAdminDashbordController implements Initializable {
 
                     }
                 }
+                
+                spane.setVvalue(1.0);
             }
         });
 
     }
 
-    private void showPopupTrainers(JsonArray jArrTrainers, String model) {
+    private void showNotification(String modelname, String status, String time) {
+        Notifications.create()
+                .title(modelname)
+                .text(status + " " + time)
+                .showWarning();
+                
+        Label not = new Label(modelname + " : " + status + " : " + time);
+        not.setPrefHeight(50);
+        not.setMaxHeight(50);
+        not.setFont(Font.font ("Verdana", 16));
+        HBox hb = new HBox();
+        hb.setStyle("-fx-border-color:firebrick;-fx-background-color:white");
+        hb.prefWidthProperty().bind(notificationBox.prefWidthProperty());
+        hb.setPrefHeight(50);
+        hb.setMaxHeight(50);
+        hb.getChildren().add(not);
+        notificationBox.getChildren().add(hb);
+        
+
+    }
+    
+    @FXML
+    private void task1_onMouseEnter(MouseEvent Event){
+        if (!trainer.isShift) taskBtn1.setText("START SHIFT");
+    }
+    
+    @FXML
+    private void task1_onMouseExit(MouseEvent Event){
+        if (!trainer.isShift) taskBtn1.setText("PENDING");
+    }
+    
+    @FXML
+    private void task2_onMouseEnter(MouseEvent Event){
+        if (!trainer.isShiftEnd) taskBtn2.setText("END SHIFT");
+    }
+    
+    @FXML
+    private void task2_onMouseExit(MouseEvent Event){
+        if (!trainer.isShiftEnd) taskBtn2.setText("PENDING");
+    }
+    
+    
+    @FXML
+    private void handleTask2() {
+        
+        if (!trainer.isShiftEnd) { 
 
         Platform.runLater(() -> {
-            // Update UI here.
-            Stage dialogStage = new Stage();
-            dialogStage.initModality(Modality.WINDOW_MODAL);
+            try {
+                // Update UI here.
 
-            VBox vbox = new VBox(new Text("Hi"), new Button("Ok."));
+                FXMLLoader modalLoader = new FXMLLoader(getClass().getResource("FXMLModal2.fxml"));
+                Parent rootl = (Parent) modalLoader.load();
 
-            for (int i = 0; i < jArrTrainers.size(); i++) {
-
-                JsonObject job = jArrTrainers.get(i).getAsJsonObject();
-                String name = job.get("name").getAsString();
-
-                Label lbl = new Label(name);
-                lbl.setOnMouseClicked(e -> {
-                    System.out.println(lbl.getText());
+                Stage dialogStage = new Stage();
+                dialogStage.initModality(Modality.WINDOW_MODAL);
+                
+                Button btnEndShift = (Button)modalLoader.getNamespace().get("btnEndShift");
+                btnEndShift.setOnMouseClicked(e -> {
                     
-                    String[] dataRegister = {trainer.name, model, name};
-                    JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
-                    
-                    socket.emit("realocateRemoveModel", mJSONArray);
-                });
-
-                vbox.getChildren().add(lbl);
-            }
-            Label lbl = new Label("Remove");
-            lbl.setOnMouseClicked(e -> {
-                    System.out.println(lbl.getText());
-                    
-                    String[] dataRegister = {trainer.name, model, "Remove"};
-                    JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
-                    
-                    socket.emit("realocateRemoveModel", mJSONArray);
-                });
+                    enableSecondTask();
             
-            vbox.getChildren().add(lbl);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String[] dataMessage = new String[2];
+                    dataMessage[0] = trainer.id+"";
+                    dataMessage[1] = timestamp.toString();
+                    JSONArray mJSONArray = new JSONArray(Arrays.asList(dataMessage));
 
-            vbox.setAlignment(Pos.CENTER);
-            vbox.setPadding(new Insets(15));
+                    socket.emit("TRAINER_END_SHIFT", mJSONArray);
+            
+                    
+                         //Stage stage = (Stage) modelPresentBtn.getScene().getWindow();
+                         //stage.close();
+                         System.exit(0);
+                    });
 
-            dialogStage.setScene(new Scene(vbox));
-            dialogStage.show();
+
+                Scene modal = new Scene(rootl);
+
+                //move around here
+                modal.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        dialogStage.setX(event.getScreenX() - xOffset);
+                        dialogStage.setY(event.getScreenY() - yOffset);
+                    }
+                });
+
+                dialogStage.setScene(modal);
+                dialogStage.initStyle(StageStyle.UNDECORATED);
+                dialogStage.setWidth(200);
+                dialogStage.setHeight(200);
+                dialogStage.show();
+                
+                
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLAdminDashbordController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+        }
+    }
+    
+private void showPopupTrainers(String model, boolean shiftStarted, boolean shiftEnded) {
+
+        Platform.runLater(() -> {
+            try {
+                // Update UI here.
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLModal.fxml"));
+                Parent rootl = (Parent) fxmlLoader.load();
+                Label modelname = (Label)fxmlLoader.getNamespace().get("modelnameModal");
+                modelname.setText(model);
+                Button remove = (Button)fxmlLoader.getNamespace().get("removeModal");
+                remove.setOnMouseClicked(e -> {
+                        System.out.println(remove.getText());
+
+                        String[] dataRegister = {trainer.name, model, "Remove"};
+                        JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+
+                        socket.emit("realocateRemoveModel", mJSONArray);
+                        
+                         Stage stage = (Stage) remove.getScene().getWindow();
+                         stage.close();
+                    });
+                System.out.println("shift started : " + shiftStarted);
+                Button modelPresentBtn = (Button)fxmlLoader.getNamespace().get("modelPresentModal");
+                modelPresentBtn.setDisable(true);
+                if (shiftStarted && shiftEnded) modelPresentBtn.setDisable(false);
+                if (!shiftStarted) modelPresentBtn.setDisable(false);
+                modelPresentBtn.setOnMouseClicked(e -> {
+                        System.out.println("Model Present");
+                        Date date= new Date();
+ 
+                        String time = (date.getTime()/ 1000L)+"";
+                        System.out.println("Time in Milliseconds: " + time);
+
+                        String[] dataRegister = {trainer.id+"", model, "Start Shift", time};
+                        JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+
+                        socket.emit("startShift", mJSONArray);
+                        
+                        //socket.emit("getmymodels", trainer.id);
+                        System.out.println("call get my models!!");
+                        
+                         Stage stage = (Stage) modelPresentBtn.getScene().getWindow();
+                         stage.close();
+                    });
+                
+                
+                
+                Button modelEndShift = (Button)fxmlLoader.getNamespace().get("modelEndShift");
+                
+                modelEndShift.setDisable(true);
+                if (shiftStarted && !shiftEnded) modelEndShift.setDisable(false);
+                
+                 
+                modelEndShift.setOnMouseClicked(e -> {
+                    
+                    String roomNumber = shiftRoomInput.getText();
+                    String awardsPoints = shiftPointsInput.getText();
+                    String placeAwards = shiftPlaceInput.getText();
+                    
+                    System.out.println("room : " + roomNumber);
+                
+                        System.out.println("Model End Shift");
+                        Date date= new Date();
+                        String time = (date.getTime()/ 1000L)+"";
+                        System.out.println("Time in Milliseconds: " + time);
+
+                        String[] dataRegister = {trainer.id+"", model, "End Shift", time, roomNumber, awardsPoints, placeAwards};
+                        JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+
+                        socket.emit("endShift", mJSONArray);
+                        
+                        //socket.emit("getmymodels", trainer.id);
+                        
+                        Stage stage = (Stage) modelPresentBtn.getScene().getWindow();
+                        stage.close();
+                    });
+
+                //VBox vbox = new VBox();
+
+//                for (int i = 0; i < jArrTrainers.size(); i++) {
+//
+//                    JsonObject job = jArrTrainers.get(i).getAsJsonObject();
+//                    String name = job.get("name").getAsString();
+//
+//                    Button lbl = new Button(name);
+//
+//                    lbl.setOnMouseClicked(e -> {
+//                        System.out.println(lbl.getText());
+//
+//                        String[] dataRegister = {trainer.name, model, name};
+//                        JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+//
+//                        socket.emit("realocateRemoveModel", mJSONArray);
+//                        
+//                        Stage stage = (Stage) lbl.getScene().getWindow();
+//                        stage.close();
+//                    });
+//
+//                    vbox.getChildren().add(lbl);
+//                }
+
+//                Label lbl = new Label("Remove");
+//                lbl.setOnMouseClicked(e -> {
+//                    System.out.println(lbl.getText());
+//                    
+//                    String[] dataRegister = {trainer.name, model, "Remove"};
+//                    JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+//
+//                    socket.emit("realocateRemoveModel", mJSONArray);
+//                });
+//                vbox.getChildren().add(lbl);
+                //vbox.setAlignment(Pos.CENTER);
+                //vbox.setPadding(new Insets(15));
+
+                //((VBox) rootl).getChildren().add(vbox);
+                
+                    if (dialogModelStage != null) dialogModelStage.close();
+                    
+                    dialogModelStage = new Stage();
+                    dialogModelStage.initModality(Modality.WINDOW_MODAL);
+
+                    Scene modal = new Scene(rootl);
+
+                    modal.setOnMousePressed(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            xOffset = event.getSceneX();
+                            yOffset = event.getSceneY();
+                        }
+                    });
+
+                    //move around here
+                    modal.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            dialogModelStage.setX(event.getScreenX() - xOffset);
+                            dialogModelStage.setY(event.getScreenY() - yOffset);
+                        }
+                    });
+
+                    dialogModelStage.setScene(modal);
+                    dialogModelStage.initStyle(StageStyle.UNDECORATED);
+                    dialogModelStage.setWidth(200);
+                    dialogModelStage.setHeight(200);
+                    dialogModelStage.show();
+                    
+                
+
+                
+                
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLAdminDashbordController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
     }
+
+//    private void showPopupTrainers(JsonArray jArrTrainers, String model, boolean shiftStarted) {
+//
+//        Platform.runLater(() -> {
+//            try {
+//                // Update UI here.
+//
+//                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLModal.fxml"));
+//                Parent rootl = (Parent) fxmlLoader.load();
+//                Label modelname = (Label)fxmlLoader.getNamespace().get("modelnameModal");
+//                modelname.setText(model);
+//
+//                System.out.println("shift started : " + shiftStarted);
+//                Button modelPresentBtn = (Button)fxmlLoader.getNamespace().get("modelPresentModal");
+//                modelPresentBtn.setDisable(shiftStarted);
+//                modelPresentBtn.setOnMouseClicked(e -> {
+//                        System.out.println("Model Present");
+//                        Date date= new Date();
+// 
+//                        String time = (date.getTime()/ 1000L)+"";
+//                        System.out.println("Time in Milliseconds: " + time);
+//
+//                        String[] dataRegister = {trainer.id+"", model, "Start Shift", time};
+//                        JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+//
+//                        socket.emit("startShift", mJSONArray);
+//                        
+//                        socket.emit("getmymodels", trainer.id);
+//                        System.out.println("call get my models!!");
+//                        
+//                         Stage stage = (Stage) modelPresentBtn.getScene().getWindow();
+//                         stage.close();
+//                    });
+//                
+//                
+//                
+//                Button modelEndShift = (Button)fxmlLoader.getNamespace().get("modelEndShift");
+//                modelEndShift.setDisable(!shiftStarted);
+//                modelEndShift.setOnMouseClicked(e -> {
+//                    
+//                    TextField roomNumberField = (TextField)fxmlLoader.getNamespace().get("roomNumber");
+//                    String roomNumber = roomNumberField.getText();
+//                    TextField awardsPointsField = (TextField)fxmlLoader.getNamespace().get("awardsPoints");
+//                    String awardsPoints = awardsPointsField.getText();
+//                    TextField placeAwardsField = (TextField)fxmlLoader.getNamespace().get("placeAwards");
+//                    String placeAwards = placeAwardsField.getText();
+//                    
+//                    System.out.println("room : " + roomNumber);
+//                
+//                        System.out.println("Model End Shift");
+//                        Date date= new Date();
+//                        String time = (date.getTime()/ 1000L)+"";
+//                        System.out.println("Time in Milliseconds: " + time);
+//
+//                        String[] dataRegister = {trainer.id+"", model, "End Shift", time, roomNumber, awardsPoints, placeAwards};
+//                        JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
+//
+//                        socket.emit("endShift", mJSONArray);
+//                        
+//                         Stage stage = (Stage) modelPresentBtn.getScene().getWindow();
+//                         stage.close();
+//                    });
+//
+//
+//                Stage dialogStage = new Stage();
+//                dialogStage.initModality(Modality.WINDOW_MODAL);
+//
+//                Scene modal = new Scene(rootl);
+//
+//                modal.setOnMousePressed(new EventHandler<MouseEvent>() {
+//                    @Override
+//                    public void handle(MouseEvent event) {
+//                        xOffset = event.getSceneX();
+//                        yOffset = event.getSceneY();
+//                    }
+//                });
+//
+//                //move around here
+//                modal.setOnMouseDragged(new EventHandler<MouseEvent>() {
+//                    @Override
+//                    public void handle(MouseEvent event) {
+//                        dialogStage.setX(event.getScreenX() - xOffset);
+//                        dialogStage.setY(event.getScreenY() - yOffset);
+//                    }
+//                });
+//
+//                dialogStage.setScene(modal);
+//                dialogStage.initStyle(StageStyle.UNDECORATED);
+//                dialogStage.setWidth(200);
+//                dialogStage.setHeight(200);
+//                dialogStage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(FXMLAdminDashbordController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        });
+//
+//    }
 
     private void updateAllModels(JsonObject arr) {
 
@@ -788,9 +1773,9 @@ public class FXMLAdminDashbordController implements Initializable {
 
     private void startWebSocketConnection() {
 
-        String[] dataRegister = {trainer.name, "2"};
+        String[] dataRegister = {trainer.name, trainer.BUILD, trainer.id+""};
         JSONArray mJSONArray = new JSONArray(Arrays.asList(dataRegister));
-        System.out.println("Socket init");
+        //System.out.println("Socket init");
 
         try {
             String socketUrl = SOCKETIO;
@@ -839,53 +1824,74 @@ public class FXMLAdminDashbordController implements Initializable {
                     socket.emit("trainerusername", mJSONArray);
                     //socket.disconnect();
 
-                    int delay = 500;
-                    int period = 60000;  // repeat every min.
-                    Timer timer = new Timer();
+                    String[] dataMessage = new String[4];
+                    dataMessage[0] = trainer.name;
+                    dataMessage[1] = String.valueOf(trainer.studio);
 
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        public void run() {
+                    JSONArray mJSONArray = new JSONArray(Arrays.asList(dataMessage));
 
-                            String[] dataMessage = new String[4];
-                            dataMessage[0] = trainer.name;
-                            dataMessage[1] = String.valueOf(trainer.studio);
+                    socket.emit("allmodels", mJSONArray);
 
-                            JSONArray mJSONArray = new JSONArray(Arrays.asList(dataMessage));
+                    socket.emit("getmymodels", trainer.id);
 
-                            socket.emit("allmodels", mJSONArray);
-
-                            socket.emit("getmymodels", trainer.email);
-                        }
-                    }, delay, period);
+//                    int delay = 500;
+//                    int period = 60000;  // repeat every min.
+//                    Timer timer = new Timer();
+//
+//                    timer.scheduleAtFixedRate(new TimerTask() {
+//                        public void run() {
+//
+//                            String[] dataMessage = new String[4];
+//                            dataMessage[0] = trainer.name;
+//                            dataMessage[1] = String.valueOf(trainer.studio);
+//
+//                            JSONArray mJSONArray = new JSONArray(Arrays.asList(dataMessage));
+//
+//                            socket.emit("allmodels", mJSONArray);
+//
+//                            socket.emit("getmymodels", trainer.id);
+//                        }
+//                    }, delay, period);
                 }
 
             }).on("modelRealocate", new Emitter.Listener() {
 
                 @Override
                 public void call(Object... args) {
-                    System.out.println("event: " + args[0]);
-                    Gson gson = new Gson();
-                    JsonElement data = gson.fromJson(args[0].toString(), JsonElement.class);
-                    JsonObject jobject = data.getAsJsonObject();
-                    Boolean success = jobject.getAsJsonPrimitive("success").getAsBoolean();
+//                    System.out.println("event: " + args[0]);
+//                    Gson gson = new Gson();
+//                    JsonElement data = gson.fromJson(args[0].toString(), JsonElement.class);
+//                    JsonObject jobject = data.getAsJsonObject();
+//                    Boolean success = jobject.getAsJsonPrimitive("success").getAsBoolean();
+//
+//                    if (success) {
+//                        String model = jobject.getAsJsonPrimitive("model").getAsString();
+//                        Boolean shift = jobject.getAsJsonPrimitive("shift_start").getAsBoolean();
+//                        
+//                        System.out.println("for model: " + model);
+//                        JsonArray jTrainers = jobject.getAsJsonArray("trainers");
+//                        
+//                        myDataTable.forEach((row) -> {
+//
+//                                if (model.equals(row.getName())) {
+//                                     showPopupTrainers(model, shift);
+//                                }
+//
+//                        });
+//
+//                       
+//                        
+//
+//                    }
 
-                    if (success) {
-                        String model = jobject.getAsJsonPrimitive("model").getAsString();
-                        System.out.println("for model: " + model);
-                        JsonArray jTrainers = jobject.getAsJsonArray("trainers");
+                }
 
-                        showPopupTrainers(jTrainers, model);
-//                        String modelname = jData.get("sync_Modelname").getAsString();
-//                        int priority = jData.get("priority").getAsInt();
-//                        int id = jData.get("id").getAsInt();
-//                        int hits_today = jData.get("hits_today").getAsInt();
-//                        String data_language = jData.get("data_language").getAsString();
-//                        String data_streamQuality = jData.get("data_streamQuality").getAsString();
-//                        String data_willingnesses = jData.get("data_willingnesses").getAsString();
-//                        String data_sex = jData.get("data_sex").getAsString();
-//                        String data_age = jData.get("data_age").getAsString();
-                    }
+            }).on("CLOSE_APP", new Emitter.Listener() {
 
+                @Override
+                public void call(Object... args) {
+                    //System.out.println("close app: ");
+                    System.exit(0);
                 }
 
             }).on("event", new Emitter.Listener() {
@@ -893,6 +1899,76 @@ public class FXMLAdminDashbordController implements Initializable {
                 @Override
                 public void call(Object... args) {
                     //System.out.println("event: " + args);
+                }
+
+            }).on("chatHistory", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+
+                    //clearChatArea();
+                    //System.out.println("chatHistory: " + args[0]);
+                    Gson gson = new Gson();
+                    JsonElement data = gson.fromJson(args[0].toString(), JsonElement.class);
+                    JsonObject jobject = data.getAsJsonObject();
+                    JsonArray jdata = jobject.getAsJsonArray("data");
+            
+
+                    for (int i = 0; i < jdata.size(); i++) {
+
+                        JsonObject job = jdata.get(i).getAsJsonObject();
+                        String toid = job.get("toID").getAsString();
+                        String fromid = job.get("fromID").getAsString();
+                        String message = job.get("message").getAsString();
+                        long time = job.get("time").getAsLong();
+
+                        //System.out.println("message :" + message);
+
+                        String modelname = fromid;
+
+                        if (fromid.equals(trainer.name)) {
+                            modelname = toid;
+                        }
+
+                        //long time = jobject.get(3).getAsLong();
+                        Timestamp timestamp = new Timestamp(time);
+                        if (fromid.equals(trainer.name)) {
+                            prepareChatTab(trainer.name, modelname, message, "right", timestamp);
+                        } else {
+                            prepareChatTab(trainer.name, modelname, message, "left", timestamp);
+                        }
+
+                    }
+                }
+
+            }).on("retriveShiftReportData", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    //System.out.println("shift report data: " + args[0].toString());
+//                    Gson gson = new Gson();
+//                    JsonElement data = gson.fromJson(args[0].toString(), JsonElement.class);
+//                    JsonObject jobject = data.getAsJsonObject();
+//                    Boolean success = jobject.getAsJsonPrimitive("success").getAsBoolean();
+//                    
+//                    if (success) {
+//                        JsonObject jData = jobject.getAsJsonObject("data");
+//                        System.out.println("get model data shift report xx:" + jData);
+//
+//                        String room = jData.get("room").isJsonNull() ? "" : jData.get("room").getAsString();
+//                        String place_awd = jData.get("place_awd").isJsonNull() ? "" : jData.get("place_awd").getAsString();
+//                        String awd_points = jData.get("awd_points").isJsonNull() ? "" : jData.get("awd_points").getAsString();
+//                        String field1 = jData.get("field1").isJsonNull() ? "" : jData.get("field1").getAsString();
+//                        String field2 = jData.get("field2").isJsonNull() ? "" : jData.get("field2").getAsString();
+//                        String field3 = jData.get("field3").isJsonNull() ? "" : jData.get("field3").getAsString();
+//                        String field4 = jData.get("field4").isJsonNull() ? "" : jData.get("field4").getAsString();
+//                        String field5 = jData.get("field5").isJsonNull() ? "" : jData.get("field5").getAsString();
+//                        String field6 = jData.get("field6").isJsonNull() ? "" : jData.get("field6").getAsString();
+//                        
+//                        updateSelectedModelShiftReportUI(room, place_awd, awd_points, field1, field2, field3, field4, field5, field6);
+//                        
+//                       
+//                    }
                 }
 
             }).on("modelchat", new Emitter.Listener() {
@@ -925,7 +2001,13 @@ public class FXMLAdminDashbordController implements Initializable {
 
                     if (success) {
                         JsonObject jData = jobject.getAsJsonObject("data");
+                        //System.out.println("get model info:" + jData);
+
                         String modelname = jData.get("sync_Modelname").getAsString();
+                        
+                        model_artistic_email = jData.get("artistic_email").getAsString();
+                        model_artistic_password = jData.get("artistic_password").getAsString();
+                        
                         int priority = jData.get("priority").getAsInt();
                         int id = jData.get("id").getAsInt();
                         int hits_today = jData.get("hits_today").getAsInt();
@@ -946,7 +2028,7 @@ public class FXMLAdminDashbordController implements Initializable {
 
                         clearChart();
 
-                        System.out.println("shift data: " + jShiftArr);
+                        //System.out.println("shift data: " + jShiftArr);
                         for (int i = 0; i < jShiftArr.size(); i++) {
 
                             JsonObject job = jShiftArr.get(i).getAsJsonObject();
@@ -988,8 +2070,8 @@ public class FXMLAdminDashbordController implements Initializable {
 
                         updateSelectedModelUI(modelname, data_profilePictureUrl, jTotal);
 
-                        System.out.println("sales :" + jSales);
-                        System.out.println("total :" + jTotal);
+                        //System.out.println("sales :" + jSales);
+                        //System.out.println("total :" + jTotal);
 
                     }
                 }
@@ -1000,6 +2082,14 @@ public class FXMLAdminDashbordController implements Initializable {
                 public void call(Object... args) {
                     System.out.println("msg trainerrr: " + args);
                     //addTexttoChat(args.toString());
+                }
+
+            }).on("updateMyModels", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    
+                    socket.emit("getmymodels", trainer.id);
                 }
 
             }).on("allmodels", new Emitter.Listener() {
@@ -1015,7 +2105,7 @@ public class FXMLAdminDashbordController implements Initializable {
                     JsonObject arr = jobject.getAsJsonObject("data");
 
                     updateAllModels(arr);
-
+                    
                 }
 
             }).on("retrivemymodels", new Emitter.Listener() {
@@ -1023,21 +2113,25 @@ public class FXMLAdminDashbordController implements Initializable {
                 @Override
                 public void call(Object... args) {
                     //System.out.println("mymodels: " + args[0]);
+                    //System.out.println("MY MODELS!!");
 
                     Gson gson = new Gson();
                     JsonElement data = gson.fromJson(args[0].toString(), JsonElement.class);
-                    System.out.println("mymodels: " + data);
+                    //System.out.println("mymodels->new: " + data);
 
                     JsonObject jobject = data.getAsJsonObject();
                     Boolean success = jobject.getAsJsonPrimitive("success").getAsBoolean();
 
                     if (success) {
-                        JsonArray arr = jobject.getAsJsonArray("data");
-                        //System.out.println("mymodels: " + arr);
-
+                        JsonArray arr = jobject.getAsJsonArray("shift_data");
+                        //System.out.println("mymodels!!!!!!!!!!!!: " + arr);
+                        //System.out.println("Receive get my models!!! with success");
                         updateMyModels(arr);
+                        
+                        
+                       
                     }
-
+                    
                 }
 
             }).on("chat", new Emitter.Listener() {

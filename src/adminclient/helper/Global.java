@@ -18,6 +18,11 @@ public class Global {
       public static final String ALl_MODELS = DOMAIN+"/api/allmodels";
       public static final String LOGIN_URL = DOMAIN+"/api/authtrainer";
       public static final String SOCKETIO = "https://work.studio20.group:3000";
+      
+      public static final String APP_SHIFT_REPORT = "http://app.studio20.group/admin/shiftreport";
+      
+      public static final String APP_UPDATE_PATH = "http://studio20.group/appstorage/";
+      public static final String CLIENT_NAME = "AdminClient-";
     
 //    public static final String DOWNLOAD_JCAM = "https://box.doclerholding.com/index.php/s/pjIhf3ZDh9uhUIM/authenticate";
 //    public static final String DOWNLOAD_SPLITER = "http://very-soft.com/media/products/distributions/wcs_1.6.339_setup_en.exe";
