@@ -35,6 +35,7 @@ public class Trainer {
         public String shiftEnd;
         public String BUILD;
         public String proxy;
+        public int trainerShiftId;
         
         
 
@@ -52,6 +53,7 @@ public class Trainer {
         shiftStart = "00:00:00";
         shiftEnd = "00:00:00";
         proxy = "http=142.93.103.225:3128;https=142.93.103.225:3128";
+        trainerShiftId = 0;
         
          try {
             BUILD = getManifestInfo();

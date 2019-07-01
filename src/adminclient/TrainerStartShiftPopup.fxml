@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="adminclient.TrainerStartShiftPopupController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="24.0" prefHeight="85.0" prefWidth="270.0" text="Are you ready to start your shift?" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="22.0">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="modalStartTrainerShiftYes" layoutX="123.0" layoutY="200.0" mnemonicParsing="false" prefWidth="70.0" style="-fx-background-color: white; -fx-border-color: crimson; -fx-border-radius: 5;" text="Yes" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="111.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="modalStartTrainerShiftNo" layoutX="426.0" layoutY="200.0" mnemonicParsing="false" prefWidth="70.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5;" text="No" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="111.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label fx:id="closeButton" alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="159.0" layoutY="6.0" onMouseClicked="#closeButtonAction" style="-fx-text-fill: red;" text="X" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

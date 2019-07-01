@@ -23,6 +23,11 @@ public class Global {
       
       public static final String APP_UPDATE_PATH = "http://studio20.group/appstorage/";
       public static final String CLIENT_NAME = "AdminClient-";
+      
+      public static final String BREAK = "BREAKALERT";
+      public static final String BIGBREAK = "TOTALBREAK";
+      public static final String AVERAGE = "AVERAGE";
+      public static final String OVERTIME = "OVERTIME";
     
 //    public static final String DOWNLOAD_JCAM = "https://box.doclerholding.com/index.php/s/pjIhf3ZDh9uhUIM/authenticate";
 //    public static final String DOWNLOAD_SPLITER = "http://very-soft.com/media/products/distributions/wcs_1.6.339_setup_en.exe";

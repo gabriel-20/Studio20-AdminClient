@@ -237,6 +237,8 @@ public class FXMLDocumentController implements Initializable {
         loginStatus.setText("v."+train.BUILD);
         double currentBuild = Double.parseDouble(train.BUILD);
         
+        System.out.println("Current build!" + currentBuild); 
+        
         String uri = APP_UPDATE_PATH;
         
         try {
@@ -280,8 +282,8 @@ public class FXMLDocumentController implements Initializable {
                 String buildexe = list.substring(12,list.length());
                 System.out.println("buildexe:"+buildexe);
                 build = buildexe.substring(0, buildexe.length() - 4);
-                System.out.println("build:"+build);
                 double d = Double.parseDouble(build);
+                System.out.println("build from server: "+d);
                 path = APP_UPDATE_PATH + list;
 
                 return d;

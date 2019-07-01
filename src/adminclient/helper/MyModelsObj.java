@@ -21,6 +21,16 @@ public class MyModelsObj {
     boolean shift;
     boolean shiftEnd;
     JsonObject jobj;
+    int shiftId;
+    int loginTime;
+
+    public int getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(int loginTime) {
+        this.loginTime = loginTime;
+    }
 
     public MyModelsObj(String name, String status, String chat, boolean shift, JsonObject jobj) {
         this.name = name;
@@ -41,8 +51,30 @@ public class MyModelsObj {
             this.shiftEnd = false;
         }
         
+        if ( (jobj != null)  && jobj.has("id") ){
+            
+            this.shiftId = jobj.get("id").getAsInt();
+            System.out.println("this shift id: " + this.shiftId);
+            
+        } 
+        
+        if ( (jobj != null)  && jobj.has("login_time") ){
+            
+            this.loginTime = jobj.get("login_time").getAsInt();
+            System.out.println("this shift login_time: " + this.loginTime);
+            
+        } 
         
         
+        
+    }
+
+    public int getShiftId() {
+        return shiftId;
+    }
+
+    public void setShiftId(int shiftId) {
+        this.shiftId = shiftId;
     }
 
     public JsonObject getJobj() {

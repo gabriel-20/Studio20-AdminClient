@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -18,6 +19,9 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainBorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminclient.FXMLAdminDashbordController">
+    <stylesheets>
+        <URL value="@dashboard.css" />
+    </stylesheets>
    <top>
       <VBox maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -73,29 +77,47 @@
    <left>
       <VBox fx:id="vBoxLeft" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="250.0" style="-fx-background-color: white; -fx-border-color: grey;" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="labelAllModels" alignment="CENTER" prefHeight="20.0" prefWidth="250.0" text="ALL MODELS" textAlignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="1.0" />
-               </VBox.margin>
-            </Label>
+            <AnchorPane prefHeight="25.0" prefWidth="250.0">
+               <children>
+                  <Label fx:id="labelAllModels" alignment="CENTER" layoutX="2.0" layoutY="-2.0" prefHeight="27.0" prefWidth="220.0" text="ALL MODELS" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="spinnerAllModels" fitHeight="29.0" fitWidth="43.0" layoutX="219.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <image>
+                        <Image url="@images/spinner.gif" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
             <HBox id="HBox" alignment="CENTER" spacing="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                 <children>
                   <Label text="Filter :" />
-                  <TextField fx:id="filterField" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="filterField" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="3.0" />
+                     </HBox.margin></TextField>
                 </children>
                <VBox.margin>
                   <Insets top="1.0" />
                </VBox.margin>
               </HBox>
             <AnchorPane fx:id="scrollModels" maxHeight="200.0" minHeight="200.0" prefHeight="200.0" />
-            <Label fx:id="labelMyModels" alignment="CENTER" prefHeight="20.0" prefWidth="200.0" text="MY MODELS">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
+            <AnchorPane prefHeight="5.0" prefWidth="250.0">
+               <children>
+                  <Label fx:id="labelMyModels" alignment="CENTER" contentDisplay="CENTER" layoutX="9.0" maxWidth="-Infinity" prefHeight="29.0" prefWidth="205.0" text="MY MODELS">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="spinnerMyModels" fitHeight="29.0" fitWidth="43.0" layoutX="269.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <image>
+                        <Image url="@images/spinner.gif" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="scrollMyModels" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" />
          </children>
       </VBox>
@@ -119,26 +141,32 @@
                                     <ScrollPane fx:id="centerScrollPane" fitToWidth="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="156.0">
                                      
                                                    <content>
-                                          <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="152.0">
+                                          <VBox fx:id="taskVBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
                                               <children>
-                                                <HBox fx:id="hDashboard" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                                <HBox fx:id="hDashboard" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" styleClass="taskHBox" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                                    <children>
-                                                      <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" style="-fx-border-color: #9c1b21;" text="Prepare for start of shift! Please read the report and alocate your models!" HBox.hgrow="ALWAYS">
+                                                      <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" styleClass="taskLbl1" text="Prepare for start of shift! Please read the report and alocate your models!" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="lbltaskBtn1" prefHeight="45.0" prefWidth="150.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                      <Label fx:id="lbltaskBtn1" maxWidth="1.7976931348623157E308" prefHeight="45.0" styleClass="taskLbl2" text="hh:mm">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
+                                                         <padding>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </padding>
                                                       </Label>
-                                                      <Button fx:id="taskBtn1" mnemonicParsing="false" onMouseClicked="#handleTask" onMouseEntered="#task1_onMouseEnter" onMouseExited="#task1_onMouseExit" prefHeight="45.0" prefWidth="100.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                                      <Button fx:id="taskBtn1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#handleTask" prefHeight="45.0" prefWidth="100.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE">
+                                                         <HBox.margin>
+                                                            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                                                         </HBox.margin></Button>
                                                    </children>
                                                 </HBox>
-                                                <HBox layoutY="46.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                                <HBox layoutY="46.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" styleClass="taskHBox" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                                    <children>
-                                                      <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" style="-fx-border-color: #9c1b21;" text="Prepare your shift report for your colleague and go home!" HBox.hgrow="ALWAYS">
+                                                      <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="45.0" styleClass="taskLbl1" text="Prepare your shift report for your colleague and go home!" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -146,12 +174,18 @@
                                                             <Insets />
                                                          </HBox.margin>
                                                       </Label>
-                                                      <Label fx:id="lbltaskBtn2" prefHeight="45.0" prefWidth="150.0" style="-fx-border-color: #9c1b21;" text="hh:mm">
+                                                      <Label fx:id="lbltaskBtn2" prefHeight="45.0" styleClass="taskLbl2" text="hh:mm">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
+                                                         <padding>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </padding>
                                                       </Label>
-                                                      <Button fx:id="taskBtn2" mnemonicParsing="false" onMouseClicked="#handleTask2" onMouseEntered="#task2_onMouseEnter" onMouseExited="#task2_onMouseExit" prefHeight="45.0" prefWidth="100.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE" />
+                                                      <Button fx:id="taskBtn2" mnemonicParsing="false" onMouseClicked="#handleTask2" prefHeight="45.0" prefWidth="100.0" style="-fx-background-color: #9c1b21;" text="PENDING" textFill="WHITE">
+                                                         <HBox.margin>
+                                                            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                                                         </HBox.margin></Button>
                                                    </children>
                                                 </HBox>
                                              </children>
@@ -277,8 +311,20 @@
          <content>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity">
                <children>
-                  <Label fx:id="selectedModelNickname" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="28.0" style="-fx-background-color: LIGHTGREEN; -fx-border-color: BLACK;" text="No Model Selected" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
-                  <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="160.0">
+                  <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="0.0" style="-fx-background-color: LIGHTGREEN; -fx-border-color: black;">
+                     <children>
+                        <Label fx:id="selectedModelNickname" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="205.0" text="No Model Selected" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <ImageView fx:id="spinnerModelProfile" fitHeight="29.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <image>
+                              <Image url="@images/spinner.gif" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <VBox.margin>
+                        <Insets right="4.0" />
+                     </VBox.margin>
+                  </AnchorPane>
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
                         <ImageView fx:id="modelProfilePic" fitWidth="240.0" layoutX="40.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <image>
@@ -295,71 +341,84 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                  </Label>
-                 <TableView fx:id="tableSales" maxWidth="240.0" prefHeight="137.0" />
-
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" text="Time Online">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
+                 <TableView fx:id="tableSales" maxWidth="240.0" prefHeight="137.0">
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy></TableView>
                   <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="120.0">
                      <children>
-                        <Label layoutX="1.0" layoutY="-1.0" prefHeight="18.0" text="Total this session">
+                        <Label layoutX="1.0" prefHeight="18.0" text="Total time this shift">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <Label layoutX="1.0" layoutY="20.0" prefHeight="18.0" text="Total earnings this shift">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="totalEarnings" layoutX="147.0" layoutY="20.0" prefHeight="20.0" text="0$" AnchorPane.rightAnchor="20.0">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="10.0" layoutY="22.0" prefHeight="18.0" text="Free Chat">
+                        <Label layoutX="10.0" layoutY="40.0" prefHeight="18.0" text="Free Chat">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="10.0" layoutY="38.0" prefHeight="18.0" text="Private Chat">
+                        <Label layoutX="10.0" layoutY="55.0" prefHeight="18.0" text="Private Chat">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="10.0" layoutY="53.0" prefHeight="18.0" text="Member Chat">
+                        <Label layoutX="10.0" layoutY="70.0" prefHeight="18.0" text="Member Chat">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="10.0" layoutY="69.0" prefHeight="18.0" text="Vip Show">
+                        <Label layoutX="10.0" layoutY="85.0" prefHeight="18.0" text="Vip Show">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="10.0" layoutY="84.0" prefHeight="18.0" text="Offline">
+                        <Label layoutX="10.0" layoutY="100.0" prefHeight="18.0" text="Offline">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="freeChatTotal" layoutX="106.0" layoutY="23.0" prefHeight="20.0" text="00:00:00">
+                        <Label fx:id="freeChatTotal" layoutX="106.0" layoutY="40.0" prefHeight="20.0" text="00:00:00">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="privateChatTotal" layoutX="106.0" layoutY="38.0" prefHeight="20.0" text="00:00:00">
+                        <Label fx:id="privateChatTotal" layoutX="106.0" layoutY="55.0" prefHeight="20.0" text="00:00:00">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="memberChatTotal" layoutX="106.0" layoutY="53.0" prefHeight="20.0" text="00:00:00">
+                        <Label fx:id="memberChatTotal" layoutX="106.0" layoutY="70.0" prefHeight="20.0" text="00:00:00">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="vipChatTotal" layoutX="106.0" layoutY="68.0" prefHeight="20.0" text="00:00:00">
+                        <Label fx:id="vipChatTotal" layoutX="106.0" layoutY="85.0" prefHeight="20.0" text="00:00:00">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="offlineTotal" layoutX="106.0" layoutY="84.0" prefHeight="20.0" text="00:00:00">
+                        <Label fx:id="offlineTotal" layoutX="106.0" layoutY="100.0" prefHeight="20.0" text="00:00:00">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="totalTime" layoutX="132.0" layoutY="1.0" prefHeight="20.0" text="00:00:00">
+                        <Label fx:id="totalTime" layoutX="147.0" prefHeight="20.0" text="00:00:00" AnchorPane.rightAnchor="20.0">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
@@ -367,7 +426,7 @@
                         
                      </children>
                   </AnchorPane>
-                  <HBox fx:id="rBtnBox" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="54.0">
+                  <HBox fx:id="rBtnBox" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308">
                      <children>
                         <Button mnemonicParsing="false" onMouseClicked="#modelCenterLogin" prefHeight="32.0" prefWidth="102" text="VIEW PROFILE">
                            <font>
@@ -375,20 +434,32 @@
                            </font>
                         </Button>
                      </children>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
                   </HBox>
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" text="Shift Timeline" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
                   </Label>
                   <AnchorPane fx:id="charts2" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="25.0" prefHeight="25.0" style="-fx-border-color: orange; -fx-background-color: grey;">
                      <VBox.margin>
                         <Insets left="11.0" right="11.0" />
                      </VBox.margin>
                   </AnchorPane>
-                  <Label fx:id="startTime" layoutX="16.0" layoutY="595.0" prefHeight="17.0" prefWidth="193.0" text="Start Shift:" />
-                  <Label fx:id="endTime" layoutX="16.0" layoutY="612.0" prefHeight="17.0" prefWidth="185.0" text="Current: " />
-                  <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="117.0">
+                  <Label fx:id="startTime" layoutX="16.0" layoutY="595.0" prefHeight="17.0" prefWidth="193.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <Label fx:id="endTime" layoutX="16.0" layoutY="612.0" prefHeight="17.0" prefWidth="185.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <AnchorPane maxWidth="1.7976931348623157E308">
                      <children>
                         <Label layoutX="7.0" layoutY="9.0" prefHeight="17.0" prefWidth="11.0" style="-fx-background-color: blue;" />
                         <Label layoutX="27.0" layoutY="9.0" text="- free chat" />
@@ -402,9 +473,21 @@
                         <Label layoutX="132.0" layoutY="31.0" text="- offline" />
                      </children>
                   </AnchorPane>
-                  <Label prefHeight="37.0" prefWidth="243.0" text="Artistic Email/Password:" />
-                  <TextField fx:id="artisticEmail" editable="false" prefHeight="37.0" prefWidth="243.0" text="artistic email" />
-                  <TextField fx:id="artisticPassword" editable="false" prefHeight="37.0" prefWidth="243.0" text="artistic password" />
+                  <Label maxWidth="1.7976931348623157E308" prefHeight="37.0" text="Artistic Email/Password:">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <TextField fx:id="artisticEmail" editable="false" maxWidth="1.7976931348623157E308" prefHeight="37.0" text="artistic email">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin></TextField>
+                  <TextField fx:id="artisticPassword" editable="false" maxWidth="1.7976931348623157E308" prefHeight="37.0" text="artistic password">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin></TextField>
 <!--                  <Label prefHeight="52.0" prefWidth="205" text="NOTES AND FEEDBACK">
                      <font>
                         <Font name="System Bold" size="12.0" />
@@ -412,6 +495,9 @@
                   </Label>-->
 <!--                  <TextArea prefHeight="127.0" />-->
                </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
             </VBox>
          </content>
          <BorderPane.margin>
